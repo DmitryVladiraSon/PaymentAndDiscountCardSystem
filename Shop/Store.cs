@@ -40,6 +40,28 @@ namespace PaymentAndDiscountCardSystem.Shop
             return _customers.Find(cusmoter => cusmoter.Name == name);
         }
 
+        private void AddingCardToCustomer(Customer customer)
+        {
+            try
+            {
+                foreach (DiscountCard discountCard in _cards)
+                {
+                    if (customer.AccumulatedAmount > discountCard.ThresholdAmount)
+                    {
+                        if (customer.GetCard(discountCard) == null) customer.AddCard(discountCard);
+                    }
+                }
+            }
+            catch (InvalidCastException ex)
+            {
+                //В логи записать, что-то, но пока сам не знаю, что ;)
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -48,36 +70,14 @@ namespace PaymentAndDiscountCardSystem.Shop
         public void ProcessPurchase(Customer customer, decimal amount)
         {
             //процесс добавления карты
-                try
-                {
-                foreach (DiscountCard discountCard in _cards)
-                {
-                    if (customer.AccumulatedAmount > discountCard.ThresholdAmount)
-                    {
-                        if (customer.GetCard(discountCard) == null) customer.AddCard(discountCard);
-                    }
-                }
-                }
-                catch (InvalidCastException ex)
-                {
-                   //В логи записать, что-то, но пока сам не знаю, что ;)
-                }        
-                catch (Exception ex)
-                {
-                   var name =  ex.GetType().Name;
-                    throw;
-                }
+            AddingCardToCustomer(customer);
 
-            
-           
-             
             //Вот это процесс оплаты
             var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).FirstOrDefault();
             int discount = 0;   
             if (priorityCard != null)
             {
                  discount = priorityCard.DiscountRate;
-                // Далее используйте переменную discount
             }
             var amountWithDiscount = amount - (amount /100* discount);
             customer.AccumulatedAmount += amount;
