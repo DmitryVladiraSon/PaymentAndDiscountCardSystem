@@ -16,6 +16,7 @@ namespace PaymentAndDiscountCardSystem.Shop
         private List<Customer> _customers = new List<Customer>();
         public void AddCard(Card card)
         {
+            
             if (!_cards.Exists(c => c.Type == card.Type))
             {
                 _cards.Add(card);
@@ -46,12 +47,7 @@ namespace PaymentAndDiscountCardSystem.Shop
         /// <param name="amount">Сумма товара</param>
         public void ProcessPurchase(Customer customer, decimal amount)
         {
-            customer.AccumulatedAmount += amount;
-
-
             //процесс добавления карты
-            
-   
                 try
                 {
                 foreach (DiscountCard discountCard in _cards)
@@ -74,7 +70,7 @@ namespace PaymentAndDiscountCardSystem.Shop
 
             
            
-              //  InvalidCastException
+             
             //Вот это процесс оплаты
             var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).FirstOrDefault();
             int discount = 0;   
@@ -84,7 +80,10 @@ namespace PaymentAndDiscountCardSystem.Shop
                 // Далее используйте переменную discount
             }
             var amountWithDiscount = amount - (amount /100* discount);
+            customer.AccumulatedAmount += amount;
+
             Console.WriteLine($"amount {amount} with discount {discount}% = {amountWithDiscount} | Accumulated amount {customer.AccumulatedAmount}");
+
         }
 
         public void GetCustomerFunnyCard( Customer customer)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PaymentAndDiscountCardSystem.Shop.Cards
 {
-    internal class DiscountCard : Card
+    internal class DiscountCard : Card 
     {
         public ulong ThresholdAmount { get; private set; }
         public DiscountCard(TypeDiscountCard type, ulong thresholdAmount, int discountRate) : base(type, discountRate)

@@ -15,32 +15,74 @@ namespace PaymentAndDiscountCardSystem
             AddingCardsInStore(store);
             AddingCustomerWith15000Balace(store, new Customer("Dima"));
             store.GetCustomerFunnyCard(store.GetCustomer("Dima"));
+
+            string authorizedUserName = Autorization(store);
+
+
             while (true)
             {
+                Console.WriteLine("Главное меню. Нажмите Enter");
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-
+                Console.Clear();
                 if (keyInfo.Key != ConsoleKey.Escape)
                 {
-                    RunSession(Autorization, out string authorizedUserName, store);
+                    //RunSession(Autorization, out string authorizedUserName, store);
 
-                    RunSession(() => ProcessPurchase(store, authorizedUserName));
+                    Console.Write("Выберите действие:\n" +
+                        "1.Начать покупки\n" +
+                        "2.Выдать веселую карту\n" +
+                        "3.Аннулировать циклическую карту\n" +
+                     //   "4.Данные о картах магазина\n" +
+                   //     "5.Данные о пользователе\n" +
+                        "4.Данные о пользователе\n" +
+                        "Введите цифру действия и нажмите Enter: ");
+                    string writingMess = Console.ReadLine();
+                    Console.Clear();
+                    switch (writingMess)
+                    {
+                        case "1":
+                            RunSession(() => ProcessPurchase(store, authorizedUserName));
+                            break;
+                        case "2":
+                            var customer = store.GetCustomer(authorizedUserName);
+                            store.GetCustomerFunnyCard(customer);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"Клиенту {customer.Name} выдана веселая карта");
+                            Console.ResetColor();
+                            break;
+                        case "3":
+                            Console.WriteLine( );
+                            break;
+                        case "4":
+                            Console.WriteLine( );
+                            break;
+                        default:
+                            break;
+                    }
+
                 }
                 else
                 {
                     Console.WriteLine("Клавиша Escape нажата. Программа завершает работу.");
-                    break; // Выход из цикла
+                    break; 
                 }
             }
-            
-            //Выдача веселой карты 
-
-            
         }
 
         static string Autorization(Store store)
         {
+            int  MIN_LENGHT_NAME = 2;
+
             Console.Write("Введите имя клиента: ");
             var name = Console.ReadLine();
+
+            while (name.Length <= MIN_LENGHT_NAME)
+            {
+                Console.WriteLine($"Имя должно быть больше {MIN_LENGHT_NAME} символова");
+                Console.Write("Введите имя клиента: ");
+                name = Console.ReadLine();
+
+            }
             var customer = store.GetCustomer(name);
 
             if (customer != null)
@@ -56,26 +98,23 @@ namespace PaymentAndDiscountCardSystem
             }
 
             return name;
-
         }
 
         static void ProcessPurchase(Store store, string CustomerName)
         {
             decimal amount;
+            
             Console.Write("Введите сумму: ");
 
             // Считываем ввод пользователя и пытаемся преобразовать его в десятичное число
-            if (decimal.TryParse(Console.ReadLine(), out amount) || amount <= 0)
+            if (decimal.TryParse(Console.ReadLine(), out amount) && amount > 0)
             {
                 store.ProcessPurchase(store.GetCustomer(CustomerName), amount);
             }
             else
             {
-                // В случае некорректного ввода
-                Console.WriteLine("Некорректный ввод. Пожалуйста, введите десятичное число.");
+                Console.WriteLine("Некорректный ввод. Пожалуйста, введите положительное десятичное число.");
             }
-
-
         }
 
 
@@ -100,10 +139,9 @@ namespace PaymentAndDiscountCardSystem
                 }
                 else
                 {
-                    Console.WriteLine("Клавиша Escape нажата. Возвращение на главное меню.Нажмите Enter");
-                    break; // Выход из цикла
+                    Console.WriteLine("Возвращение на главное меню. Нажмите Enter");
+                    break; 
                 }
-
 
             }
         }
@@ -132,40 +170,3 @@ namespace PaymentAndDiscountCardSystem
         }
     }
 }
-
-
-//Нужно чтобы приоритет вводился НЕ в ручную. Может получиться конфликт приоритета. Это нужно исправить. Например. Ошибка = приоритет.1 приоритет.1
-
-
-//while (true)
-//{
-//    // Ожидание нажатия клавиши
-//    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-
-//    // Проверка, является ли нажатая клавиша Escape
-//    if (keyInfo.Key != ConsoleKey.Escape)
-//    {
-//        string authorizationUserName = Autorization(Store);
-
-//        while (true)
-//        {
-//            ConsoleKeyInfo keyInfoIn = Console.ReadKey(true);
-
-//            if (keyInfoIn.Key == ConsoleKey.Escape)
-//            {
-//                Console.WriteLine("Клавиша Escape нажата. Программа завершает работу.");
-//                break; // Выход из цикла
-//            }
-
-//            ProcessPurchase(Store, authorizationUserName);
-//        }
-
-//    }
-//    else
-//    {
-//        Console.WriteLine("Клавиша Escape нажата. Программа завершает работу.");
-//        break; // Выход из цикла
-
-//    }
-//}
-

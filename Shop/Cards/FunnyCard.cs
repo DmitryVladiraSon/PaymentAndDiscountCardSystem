@@ -10,24 +10,28 @@ namespace PaymentAndDiscountCardSystem.Shop.Cards
     {
         public FunnyCard(TypeDiscountCard type, int discountRate) : base(type, discountRate)
         {
+            DiscountsDays = GetRandomDaysInMonth(DiscountsDays);
+        }
+
+        public DateTime[] DiscountsDays { get; set; } = new DateTime[10];
+
+        private DateTime[] GetRandomDaysInMonth(DateTime[] discountsDays)
+        {
             // Создаем генератор случайных чисел
             Random rnd = new Random();
 
             DateTime currentDate = DateTime.Today;
 
-            for (int i = 0; i < DiscountsDays.Length; i++)
+            for (int i = 0; i < discountsDays.Length; i++)
             {
                 int randomDay = rnd.Next(1, DateTime.DaysInMonth(currentDate.Year, currentDate.Month) + 1);
 
-                DiscountsDays[i] = new DateTime(currentDate.Year, currentDate.Month, randomDay);
+                discountsDays[i] = new DateTime(currentDate.Year, currentDate.Month, randomDay);
             }
-            DiscountsDays = DiscountsDays.OrderByDescending(day => day.Day).ToArray();
-            
+            return  discountsDays.OrderByDescending(day => day.Day).ToArray();
+
 
         }
-
-        public DateTime[] DiscountsDays { get; set; } = new DateTime[10];
-
 
     }
 }
