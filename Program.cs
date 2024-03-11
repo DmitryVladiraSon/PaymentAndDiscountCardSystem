@@ -1,7 +1,10 @@
-﻿using PaymentAndDiscountCardSystem.Shop;
+﻿using Microsoft.Extensions.Logging;
+
+using PaymentAndDiscountCardSystem.Shop;
 using PaymentAndDiscountCardSystem.Shop.Cards;
 using PaymentAndDiscountCardSystem.Users;
-using System;
+using ClassLibrary.Domain;
+using ClassLibrary.Domain.Service;
 
 namespace PaymentAndDiscountCardSystem
 {
@@ -9,6 +12,14 @@ namespace PaymentAndDiscountCardSystem
     {
         static void Main(string[] args)
         {
+            ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            });
+            CustomerService customerService = new CustomerService(loggerFactory.CreateLogger<CustomerService>());
+
+            ClassLibrary.Domain.Models.Customer customer1 = new ClassLibrary.Domain.Models.Customer() ;
+            customerService.Add(customer1);
 
             var store = new Store();
             

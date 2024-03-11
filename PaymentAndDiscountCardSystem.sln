@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentAndDiscountCardSystem", "PaymentAndDiscountCardSystem.csproj", "{09C82F49-E5C7-4D08-92DD-E5502A7DCF38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystem", "PaymentAndDiscountCardSystem.csproj", "{09C82F49-E5C7-4D08-92DD-E5502A7DCF38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary.Domain", "..\ClassLibrary.Domain\ClassLibrary.Domain.csproj", "{2F7856DF-6B35-45C0-8CF5-1D06772A8FDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{09C82F49-E5C7-4D08-92DD-E5502A7DCF38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09C82F49-E5C7-4D08-92DD-E5502A7DCF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09C82F49-E5C7-4D08-92DD-E5502A7DCF38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F7856DF-6B35-45C0-8CF5-1D06772A8FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F7856DF-6B35-45C0-8CF5-1D06772A8FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F7856DF-6B35-45C0-8CF5-1D06772A8FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F7856DF-6B35-45C0-8CF5-1D06772A8FDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

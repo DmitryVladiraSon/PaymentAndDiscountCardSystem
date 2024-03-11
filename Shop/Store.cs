@@ -1,11 +1,5 @@
 ﻿using PaymentAndDiscountCardSystem.Shop.Cards;
 using PaymentAndDiscountCardSystem.Users;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PaymentAndDiscountCardSystem.Shop
 {
@@ -16,7 +10,6 @@ namespace PaymentAndDiscountCardSystem.Shop
         private List<Customer> _customers = new List<Customer>();
         public void AddCard(Card card)
         {
-            
             if (!_cards.Exists(c => c.Type == card.Type))
             {
                 _cards.Add(card);
@@ -83,7 +76,6 @@ namespace PaymentAndDiscountCardSystem.Shop
             customer.AccumulatedAmount += amount;
 
             Console.WriteLine($"amount {amount} with discount {discount}% = {amountWithDiscount} | Accumulated amount {customer.AccumulatedAmount}");
-
         }
 
         public void GetCustomerFunnyCard( Customer customer)
