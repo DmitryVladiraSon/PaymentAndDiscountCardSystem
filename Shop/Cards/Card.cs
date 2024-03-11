@@ -8,15 +8,15 @@ namespace PaymentAndDiscountCardSystem.Shop.Cards
 {
     internal abstract class Card
     {
-
-        public Card(TypeDiscountCard type, int discountRate)
+        public Card(DiscountCardType type, int discountRate)
         {
             Type = type;
             DiscountRate = discountRate;
-        }
-        public int DiscountRate { get; private set; }
 
-        public TypeDiscountCard Type { get; private set; }
+        }
+        public bool IsActive = false;
+        public int DiscountRate { get; private set; }
+        public DiscountCardType Type { get; private set; }
 
     }
 }

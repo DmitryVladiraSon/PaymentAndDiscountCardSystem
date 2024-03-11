@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PaymentAndDiscountCardSystem.Shop.Cards
 {
-    enum TypeDiscountCard
+    enum DiscountCardType
     {
         Tube,
         Transistor,

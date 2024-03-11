@@ -8,7 +8,7 @@ namespace PaymentAndDiscountCardSystem.Shop.Cards
 {
     internal class FunnyCard : Card
     {
-        public FunnyCard(TypeDiscountCard type, int discountRate) : base(type, discountRate)
+        public FunnyCard(DiscountCardType type, int discountRate) : base(type, discountRate)
         {
             DiscountsDays = GetRandomDaysInMonth(DiscountsDays);
         }
