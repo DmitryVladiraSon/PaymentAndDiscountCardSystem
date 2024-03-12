@@ -11,13 +11,20 @@ namespace PaymentAndDiscountCardSystem
     {
         static void Main(string[] args)
         {
-            List<Customer> customers = new List<Customer>();
-
+            List<Customer> customers = new List<Customer>(); // This is storage/repository
+            Customer[] arrayCust = new Customer[1];
+           
+            //Initializing console logging
             ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
             {
                 builder.AddConsole();
             });
-            CustomerService customerService = new CustomerService(customers,loggerFactory.CreateLogger<CustomerService>());
+
+
+            //Services
+            CustomerService customerService = new CustomerService(customers, loggerFactory.CreateLogger<CustomerService>());
+            PurchaseService purchaseService = new PurchaseService(customerService);
+           // CustomerService customerService1 = new CustomerService(arrayCust,loggerFactory.CreateLogger<CustomerService>());
 
             Customer customer1 = new Customer("Dima", "pass") ;
             customerService.Add(customer1);

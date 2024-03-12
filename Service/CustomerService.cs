@@ -11,8 +11,12 @@ namespace PaymentAndDiscountCardSystem.Service
 {
     internal class CustomerService : ICustomerService
     {
+        
         private List<Customer> _customers;
         private readonly ILogger _logger;
+
+       // IEnumerable
+           // List
         public CustomerService(List<Customer> customers, ILogger logger)
         {
             _customers = customers;

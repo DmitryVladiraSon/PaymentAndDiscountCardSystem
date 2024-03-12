@@ -8,9 +8,10 @@ namespace PaymentAndDiscountCardSystem.Service
     internal class PurchaseService : IPurchaseService
     {
         private CustomerService _customerService;
+        private List<Customer> _customers;
         public PurchaseService(CustomerService customerService)
         {
-            _customerService = customerService;
+          //  _customerService = customerService;
         }
         public void Purchase(Customer customer, decimal amount)
         {
