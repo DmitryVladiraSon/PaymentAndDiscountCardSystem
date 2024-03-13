@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentAndDiscountCardSystem.Shop.Cards
+namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
 {
-    internal class FunnyCard : Card
+    public class FunnyCard : Card
     {
-        public FunnyCard(DiscountCardType type, int discountRate) : base(type, discountRate)
+        public FunnyCard( int discountRate) : base(discountRate)
         {
             DiscountsDays = GetRandomDaysInMonth(DiscountsDays);
+            Type = DiscountCardType.Cheerful;
         }
-
+        
         public DateTime[] DiscountsDays { get; set; } = new DateTime[10];
 
         private DateTime[] GetRandomDaysInMonth(DateTime[] discountsDays)

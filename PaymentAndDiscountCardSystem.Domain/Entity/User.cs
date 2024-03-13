@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentAndDiscountCardSystem.Models
+namespace PaymentAndDiscountCardSystem.Domain.Entity
 {
-    internal class User
+    public class User
     {
         public User(string name, string password)
         {

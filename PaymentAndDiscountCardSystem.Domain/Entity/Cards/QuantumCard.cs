@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentAndDiscountCardSystem.Shop.Cards
+namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
 {
-    internal class QuantumCard : Card
+    public class QuantumCard : Card
     {
         public const int VALIDITY_PERIOD = 180;
         private DateTime creationDate;
-        public QuantumCard(DiscountCardType type, int discountRate) : base(type, discountRate)
+        public QuantumCard( int discountRate) : base(discountRate)
         {
             creationDate = DateTime.Now;
+            Type = DiscountCardType.Quantum;
         }
         public bool IsExpired()
         {

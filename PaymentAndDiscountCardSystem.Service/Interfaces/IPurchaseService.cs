@@ -1,6 +1,7 @@
-﻿using PaymentAndDiscountCardSystem.Models;
+﻿
+using PaymentAndDiscountCardSystem.Domain.Entity;
 
-namespace PaymentAndDiscountCardSystem.Service
+namespace PaymentAndDiscountCardSystem.Service.Interfaces
 {
     internal interface IPurchaseService
     {

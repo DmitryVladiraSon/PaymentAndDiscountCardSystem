@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-
-using PaymentAndDiscountCardSystem.Shop;
-using PaymentAndDiscountCardSystem.Shop.Cards;
-using PaymentAndDiscountCardSystem.Models;
-using PaymentAndDiscountCardSystem.Service;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using PaymentAndDiscountCardSystem.Domain.Entity;
+using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystem.Service.Implementation;
+using PaymentAndDiscountCardSystem.Service.Interfaces;
 
 namespace PaymentAndDiscountCardSystem
 {
@@ -11,19 +11,27 @@ namespace PaymentAndDiscountCardSystem
     {
         static void Main(string[] args)
         {
+            var services = new ServiceCollection()
+                .AddTransient<ICustomerService, CustomerService>()
+                .AddTransient<List<Customer>>() // Delete THIS SHIT
+            .AddLogging();
+
+            using var providerService = services.BuildServiceProvider();
+
             List<Customer> customers = new List<Customer>(); // This is storage/repository
             Customer[] arrayCust = new Customer[1];
            
             //Initializing console logging
             ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
-            {
+            { 
                 builder.AddConsole();
             });
 
-
+            
             //Services
-            CustomerService customerService = new CustomerService(customers, loggerFactory.CreateLogger<CustomerService>());
-            PurchaseService purchaseService = new PurchaseService(customerService);
+         //    CustomerService customerService = new CustomerService(customers, loggerFactory.CreateLogger<CustomerService>());
+             var customerService = providerService.GetService<ICustomerService>();
+            PurchaseService purchaseService = new PurchaseService();
            // CustomerService customerService1 = new CustomerService(arrayCust,loggerFactory.CreateLogger<CustomerService>());
 
             Customer customer1 = new Customer("Dima", "pass") ;
@@ -32,13 +40,11 @@ namespace PaymentAndDiscountCardSystem
            var authorizedUserId = customerService.GetByName("Dima");
 
 
-            var store = new Store();
             
-            AddingCardsInStore(store);
-            AddingCustomerWith15000Balace(store, new Customer("Dima","pass"));
-            store.GetCustomerFunnyCard(store.GetCustomer("Dima"));
+           // AddingCardsInStore(store);
+           // AddingCustomerWith15000Balace(store, new Customer("Dima","pass"));
 
-            string authorizedUserName = Autorization(store);
+            string authorizedUserName = Autorization(customerService);
 
 
             while (true)
@@ -66,8 +72,8 @@ namespace PaymentAndDiscountCardSystem
                             RunSession(() => ProcessPurchase(customers, authorizedUserId));
                             break;
                         case "2":
-                            var customer = store.GetCustomer(authorizedUserName);
-                            store.GetCustomerFunnyCard(customer);
+                            var customer = customerService.GetByName(authorizedUserName);
+                            customerService.GetCustomerFunnyCard(customer);
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine($"Клиенту {customer.Name} выдана веселая карта");
                             Console.ResetColor();
@@ -91,8 +97,10 @@ namespace PaymentAndDiscountCardSystem
             }
         }
 
-        static string Autorization(Store store)
+        static string Autorization(ICustomerService customerService)
         {
+           
+
             int  MIN_LENGHT_NAME = 2;
 
             Console.Write("Введите имя клиента: ");
@@ -105,7 +113,7 @@ namespace PaymentAndDiscountCardSystem
                 name = Console.ReadLine();
 
             }
-            var customer = store.GetCustomer(name);
+            var customer = customerService.GetByName(name); 
 
             if (customer != null)
             {
@@ -113,8 +121,8 @@ namespace PaymentAndDiscountCardSystem
             } 
             else
             { 
-                store.AddCustomer(new Customer(name,"pass"));
-                customer = store.GetCustomer(name);
+                customerService.Add(new Customer(name,"pass"));
+                customer = customerService.GetByName(name);
                 Console.WriteLine($"Hello {customer.Name} | {customer.AccumulatedAmount} $");
 
             }
@@ -132,8 +140,8 @@ namespace PaymentAndDiscountCardSystem
                 builder.AddConsole();
             });
 
-            CustomerService customerService1 = new CustomerService(customers, loggerFactory.CreateLogger<CustomerService>());
-            PurchaseService purchaseService = new PurchaseService(customerService1);
+            CustomerService customerService1 = new CustomerService(customers);//, loggerFactory.CreateLogger<CustomerService>());
+            PurchaseService purchaseService = new PurchaseService();
             // Считываем ввод пользователя и пытаемся преобразовать его в десятичное число
             if (decimal.TryParse(Console.ReadLine(), out amount) && amount > 0)
             {
@@ -147,10 +155,6 @@ namespace PaymentAndDiscountCardSystem
 
 
 
-        static void RunSession(Func<Store, string> authorizationFunc, out string authorizedUserName, Store store)
-        {
-            authorizedUserName = authorizationFunc(store);
-        }
 
         static void RunSession(params Action[] actions)
         {
@@ -174,27 +178,5 @@ namespace PaymentAndDiscountCardSystem
             }
         }
 
-        static void AddingCardsInStore(Store store)
-        {
-            store.AddCard(new DiscountCard(DiscountCardType.Tube, 5000, 5));
-            store.AddCard(new DiscountCard(DiscountCardType.Transistor, 12500, 10));
-            store.AddCard(new DiscountCard(DiscountCardType.Integrated, 25000, 15));
-            store.AddCard(new DiscountCard(DiscountCardType.Transistor, 12500, 10));
-
-            //Добавь веселую карту 
-            store.AddCard(new FunnyCard(DiscountCardType.Cheerful, 10));
-
-            //Добавление кватновой карты
-            store.AddCard(new QuantumCard(DiscountCardType.Quantum, 20));
-            //Console.ReadKey();
-            //Console.Clear();
-        }
-
-        static void AddingCustomerWith15000Balace(Store store, Customer customer)
-        {
-            store.AddCustomer(customer);
-
-            //store.ProcessPurchase(store.GetCustomer(customer.Name), 15000);
-        }
     }
 }

@@ -1,15 +1,16 @@
 ﻿
-using PaymentAndDiscountCardSystem.Models;
-using PaymentAndDiscountCardSystem.Shop.Cards;
 
+using PaymentAndDiscountCardSystem.Domain.Entity;
+using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystem.Service.Interfaces;
 
-namespace PaymentAndDiscountCardSystem.Service
+namespace PaymentAndDiscountCardSystem.Service.Implementation
 {
     internal class PurchaseService : IPurchaseService
     {
         private CustomerService _customerService;
         private List<Customer> _customers;
-        public PurchaseService(CustomerService customerService)
+        public PurchaseService()
         {
           //  _customerService = customerService;
         }
@@ -17,7 +18,7 @@ namespace PaymentAndDiscountCardSystem.Service
         {
             AddingDiscountCardsToCustomer(customer);
 
-            var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).FirstOrDefault();
+            var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).Where(card => card.IsActive).FirstOrDefault();
             int discount = 0;
             if (priorityCard != null)
             {

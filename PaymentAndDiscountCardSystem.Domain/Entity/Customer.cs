@@ -1,15 +1,8 @@
-﻿using PaymentAndDiscountCardSystem.Shop;
-using PaymentAndDiscountCardSystem.Shop.Cards;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 
-namespace PaymentAndDiscountCardSystem.Models
+namespace PaymentAndDiscountCardSystem.Domain.Entity
 {
-    internal class Customer : User
+    public class Customer : User
     {
         
         private List<Card> _cards;
@@ -17,7 +10,7 @@ namespace PaymentAndDiscountCardSystem.Models
         public List<Card> Cards
         {
             get { return _cards; }
-            set { _cards = value; }
+            //set { _cards = value; }
         }
 
         public decimal AccumulatedAmount;
@@ -37,17 +30,11 @@ namespace PaymentAndDiscountCardSystem.Models
             _cards.Add(new DiscountCard(DiscountCardType.Transistor, 12500, 10));
 
             //Добавь веселую карту 
-            _cards.Add(new FunnyCard(DiscountCardType.Cheerful, 10));
+            _cards.Add(new FunnyCard(10));
 
             //Добавление квантовой карты
-            _cards.Add(new QuantumCard(DiscountCardType.Quantum, 20));
+            _cards.Add(new QuantumCard(20));
         }
-
-        public void AddCard(Card card)
-        {
-            Cards.Add(card);
-        }
-
 
     }
 }

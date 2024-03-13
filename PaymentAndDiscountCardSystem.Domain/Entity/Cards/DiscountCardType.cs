@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentAndDiscountCardSystem.Shop.Cards
+namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
 {
-    enum DiscountCardType
+    public enum DiscountCardType
     {
         Tube,
         Transistor,
