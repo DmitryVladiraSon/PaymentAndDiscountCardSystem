@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PaymentAndDiscountCardSystem.DAL\PaymentAndDiscountCardSystem.DAL.csproj" />
     <ProjectReference Include="..\PaymentAndDiscountCardSystem.Domain\PaymentAndDiscountCardSystem.Domain.csproj" />
   </ItemGroup>
 

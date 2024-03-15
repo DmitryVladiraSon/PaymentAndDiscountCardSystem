@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="PaymentAndDiscountCardSystem.Domain\PaymentAndDiscountCardSystem.Domain.csproj" />
     <ProjectReference Include="PaymentAndDiscountCardSystem.Service\PaymentAndDiscountCardSystem.Service.csproj" />
+    <ProjectReference Include="PaymentAndDiscountCardSystem.DAL\PaymentAndDiscountCardSystem.DAL.csproj" />
   </ItemGroup>
 
 </Project>

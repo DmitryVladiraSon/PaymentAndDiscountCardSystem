@@ -1,5 +1,8 @@
 ﻿
 
+using Microsoft.Extensions.Logging;
+using PaymentAndDiscountCardSystem.DAL.Interfaces;
+using PaymentAndDiscountCardSystem.DAL.Repositories;
 using PaymentAndDiscountCardSystem.Domain.Entity;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 using PaymentAndDiscountCardSystem.Service.Interfaces;
@@ -9,15 +12,18 @@ namespace PaymentAndDiscountCardSystem.Service.Implementation
     internal class PurchaseService : IPurchaseService
     {
         private CustomerService _customerService;
-        private List<Customer> _customers;
-        public PurchaseService()
+        private ICustomerRepository _customersRepo;
+        private readonly ILogger<PurchaseService> _logger;
+        public PurchaseService(ICustomerRepository customers,ILogger<PurchaseService> logger)
         {
-          //  _customerService = customerService;
+            _customersRepo = customers;
+            _logger = logger;
         }
-        public void Purchase(Customer customer, decimal amount)
+        public async void Purchase(Guid id, decimal amount)
         {
-            AddingDiscountCardsToCustomer(customer);
+            var customer = await _customersRepo.Get(id);
 
+            AddingDiscountCardsToCustomer(customer);
             var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).Where(card => card.IsActive).FirstOrDefault();
             int discount = 0;
             if (priorityCard != null)
@@ -28,7 +34,8 @@ namespace PaymentAndDiscountCardSystem.Service.Implementation
             customer.AccumulatedAmount += amount;
 
             Console.WriteLine($"amount {amount} with discount {discount}% = {amountWithDiscount} | Accumulated amount {customer.AccumulatedAmount}");
-
+            _logger.LogInformation($"amount {amount} with discount {discount}% = {amountWithDiscount} | Accumulated amount {customer.AccumulatedAmount}");
+            
             customer.AccumulatedAmount += amount;
         }
 

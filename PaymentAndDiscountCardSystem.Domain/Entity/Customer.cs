@@ -27,7 +27,7 @@ namespace PaymentAndDiscountCardSystem.Domain.Entity
             _cards.Add(new DiscountCard(DiscountCardType.Tube, 5000, 5));
             _cards.Add(new DiscountCard(DiscountCardType.Transistor, 12500, 10));
             _cards.Add(new DiscountCard(DiscountCardType.Integrated, 25000, 15));
-            _cards.Add(new DiscountCard(DiscountCardType.Transistor, 12500, 10));
+           // _cards.Add(new DiscountCard(DiscountCardType.Transistor, 12500, 10));
 
             //Добавь веселую карту 
             _cards.Add(new FunnyCard(10));

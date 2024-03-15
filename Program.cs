@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using PaymentAndDiscountCardSystem.DAL.Interfaces;
+using PaymentAndDiscountCardSystem.DAL.Repositories;
 using PaymentAndDiscountCardSystem.Domain.Entity;
-using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 using PaymentAndDiscountCardSystem.Service.Implementation;
 using PaymentAndDiscountCardSystem.Service.Interfaces;
 
@@ -11,41 +12,36 @@ namespace PaymentAndDiscountCardSystem
     {
         static void Main(string[] args)
         {
-            var services = new ServiceCollection()
-                .AddTransient<ICustomerService, CustomerService>()
-                .AddTransient<List<Customer>>() // Delete THIS SHIT
-            .AddLogging();
+            var services = new ServiceCollection() 
+                .AddSingleton<ICustomerRepository,CustomerRepository>()
+                .AddSingleton<ICustomerService, CustomerService>()
+                .AddSingleton<IPurchaseService,PurchaseService>()
+                .AddSingleton<List<Customer>>() // Delete THIS ?
+                //Adding logging in Dep.Inj.
+            .AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConsole();
+            });
 
             using var providerService = services.BuildServiceProvider();
 
-            List<Customer> customers = new List<Customer>(); // This is storage/repository
-            Customer[] arrayCust = new Customer[1];
-           
             //Initializing console logging
-            ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+            ILoggerFactory loggerFactory = LoggerFactory.Create(builder => // Шо за логгер Factory
             { 
                 builder.AddConsole();
             });
 
             
             //Services
-         //    CustomerService customerService = new CustomerService(customers, loggerFactory.CreateLogger<CustomerService>());
              var customerService = providerService.GetService<ICustomerService>();
-            PurchaseService purchaseService = new PurchaseService();
-           // CustomerService customerService1 = new CustomerService(arrayCust,loggerFactory.CreateLogger<CustomerService>());
+            IPurchaseService purchaseService = providerService.GetService<IPurchaseService>();
 
             Customer customer1 = new Customer("Dima", "pass") ;
             customerService.Add(customer1);
 
-           var authorizedUserId = customerService.GetByName("Dima");
+           //var  = customerService.GetByName("Dima");
 
-
-            
-           // AddingCardsInStore(store);
-           // AddingCustomerWith15000Balace(store, new Customer("Dima","pass"));
-
-            string authorizedUserName = Autorization(customerService);
-
+            Guid authorizedUserId = Autorization(customerService);
 
             while (true)
             {
@@ -54,8 +50,6 @@ namespace PaymentAndDiscountCardSystem
                 Console.Clear();
                 if (keyInfo.Key != ConsoleKey.Escape)
                 {
-                    //RunSession(Autorization, out string authorizedUserName, store);
-
                     Console.Write("Выберите действие:\n" +
                         "1.Начать покупки\n" +
                         "2.Выдать веселую карту\n" +
@@ -69,10 +63,10 @@ namespace PaymentAndDiscountCardSystem
                     switch (writingMess)
                     {
                         case "1":
-                            RunSession(() => ProcessPurchase(customers, authorizedUserId));
+                            RunSession(() => ProcessPurchase(authorizedUserId, purchaseService));
                             break;
                         case "2":
-                            var customer = customerService.GetByName(authorizedUserName);
+                            var customer = customerService.GetById(authorizedUserId);
                             customerService.GetCustomerFunnyCard(customer);
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine($"Клиенту {customer.Name} выдана веселая карта");
@@ -97,18 +91,16 @@ namespace PaymentAndDiscountCardSystem
             }
         }
 
-        static string Autorization(ICustomerService customerService)
+        static Guid Autorization(ICustomerService customerService)
         {
-           
-
-            int  MIN_LENGHT_NAME = 2;
+            const int minLengthSize = 2;
 
             Console.Write("Введите имя клиента: ");
             var name = Console.ReadLine();
 
-            while (name.Length <= MIN_LENGHT_NAME)
+            while (name.Length <= minLengthSize)
             {
-                Console.WriteLine($"Имя должно быть больше {MIN_LENGHT_NAME} символова");
+                Console.WriteLine($"Имя должно быть больше {minLengthSize} символова");
                 Console.Write("Введите имя клиента: ");
                 name = Console.ReadLine();
 
@@ -124,28 +116,20 @@ namespace PaymentAndDiscountCardSystem
                 customerService.Add(new Customer(name,"pass"));
                 customer = customerService.GetByName(name);
                 Console.WriteLine($"Hello {customer.Name} | {customer.AccumulatedAmount} $");
-
             }
-
-            return name;
+           
+            return customer.Id;
         }
 
-        static void ProcessPurchase(List<Customer> customers, Customer customer)
+        static void ProcessPurchase(Guid id, IPurchaseService purchaseService)
         {
             decimal amount;
             
             Console.Write("Введите сумму: ");
-            ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder.AddConsole();
-            });
-
-            CustomerService customerService1 = new CustomerService(customers);//, loggerFactory.CreateLogger<CustomerService>());
-            PurchaseService purchaseService = new PurchaseService();
             // Считываем ввод пользователя и пытаемся преобразовать его в десятичное число
             if (decimal.TryParse(Console.ReadLine(), out amount) && amount > 0)
             {
-                purchaseService.Purchase(customer, amount);
+                purchaseService.Purchase(id, amount);
             }
             else
             {
