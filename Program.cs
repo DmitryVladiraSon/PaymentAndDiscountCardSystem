@@ -5,6 +5,9 @@ using PaymentAndDiscountCardSystem.DAL.Repositories;
 using PaymentAndDiscountCardSystem.Domain.Entity;
 using PaymentAndDiscountCardSystem.Service.Implementation;
 using PaymentAndDiscountCardSystem.Service.Interfaces;
+using Serilog;
+using Serilog.Core;
+using System.Runtime.CompilerServices;
 
 namespace PaymentAndDiscountCardSystem
 {
@@ -12,18 +15,68 @@ namespace PaymentAndDiscountCardSystem
     {
         static void Main(string[] args)
         {
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogFiles", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}", "Log.txt"),
+                    rollingInterval: RollingInterval.Day,
+                    outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message}{NewLine}{Exception}")
+                .CreateLogger();
+
+            var log1 = new LoggerConfiguration()
+    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
             var services = new ServiceCollection() 
                 .AddSingleton<ICustomerRepository,CustomerRepository>()
                 .AddSingleton<ICustomerService, CustomerService>()
                 .AddSingleton<IPurchaseService,PurchaseService>()
                 .AddSingleton<List<Customer>>() // Delete THIS ?
-                //Adding logging in Dep.Inj.
-            .AddLogging(loggingBuilder =>
-            {
-                loggingBuilder.AddConsole();
-            });
+        .AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.AddSerilog(log);
+        });
+
+
+
 
             using var providerService = services.BuildServiceProvider();
+
+            //Define the path to the text file
+            string logFilePath = "console_log.txt";
+
+            //Create a StreamWriter to write logs to a text file
+            using (StreamWriter logFileWriter = new StreamWriter(logFilePath, append: true))
+            {
+                //Create an ILoggerFactory
+                ILoggerFactory loggerFactoryFile = LoggerFactory.Create(builder =>
+                {
+                    //Add console output
+                    builder.AddSimpleConsole(options =>
+                    {
+                        options.IncludeScopes = true;
+                        options.SingleLine = true;
+                        options.TimestampFormat = "HH:mm:ss ";
+                    });
+
+                    //Add a custom log provider to write logs to text files
+                    builder.AddProvider(new CustomFileLoggerProvider(logFileWriter));
+                });
+
+                //Create an ILogger
+                ILogger<Program> logger = loggerFactoryFile.CreateLogger<Program>();
+
+                // Output some text on the console
+                using (logger.BeginScope("[scope is enabled]"))
+                {
+                    logger.LogInformation("Hello World!");
+                    logger.LogInformation("Logs contain timestamp and log level.");
+                    logger.LogInformation("Each log message is fit in a single line.");
+                }
+            }
+
+
+
+
 
             //Initializing console logging
             ILoggerFactory loggerFactory = LoggerFactory.Create(builder => // Шо за логгер Factory
@@ -137,9 +190,6 @@ namespace PaymentAndDiscountCardSystem
             }
         }
 
-
-
-
         static void RunSession(params Action[] actions)
         {
             while (true)
@@ -162,5 +212,88 @@ namespace PaymentAndDiscountCardSystem
             }
         }
 
+        // Customized ILoggerProvider, writes logs to text files
+        public class CustomFileLoggerProvider : ILoggerProvider
+        {
+            private readonly StreamWriter _logFileWriter;
+
+            public CustomFileLoggerProvider(StreamWriter logFileWriter)
+            {
+                _logFileWriter = logFileWriter ?? throw new ArgumentNullException(nameof(logFileWriter));
+            }
+
+            public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName)
+            {
+                return new CustomFileLogger(categoryName, _logFileWriter);
+            }
+
+            public void Dispose()
+            {
+                _logFileWriter.Dispose();
+            }
+        }
+
+        // Customized ILogger, writes logs to text files
+        public class CustomFileLogger : Microsoft.Extensions.Logging.ILogger
+        {
+            private readonly string _categoryName;
+            private readonly StreamWriter _logFileWriter;
+
+            public CustomFileLogger(string categoryName, StreamWriter logFileWriter)
+            {
+                _categoryName = categoryName;
+                _logFileWriter = logFileWriter;
+            }
+
+            public IDisposable BeginScope<TState>(TState state)
+            {
+                return null;
+            }
+
+            public bool IsEnabled(LogLevel logLevel)
+            {
+                // Ensure that only information level and higher logs are recorded
+                return logLevel >= LogLevel.Information;
+            }
+
+            public void Log<TState>(
+                LogLevel logLevel,
+                EventId eventId,
+                TState state,
+                Exception exception,
+                Func<TState, Exception, string> formatter)
+            {
+                // Ensure that only information level and higher logs are recorded
+                if (!IsEnabled(logLevel))
+                {
+                    return;
+                }
+
+                // Get the formatted log message
+                var message = formatter(state, exception);
+
+                //Write log messages to text file
+                _logFileWriter.WriteLine($"[{logLevel}] [{_categoryName}] {message}");
+                _logFileWriter.Flush();
+            }
+        }
+        public class SetupLogging
+        {
+            [ModuleInitializer]
+            public static void Init()
+            {
+                Initialize();
+            }
+            public static void Initialize()
+            {
+
+                Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Verbose()
+                    .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogFiles", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}", "Log.txt"),
+                        rollingInterval: RollingInterval.Infinite,
+                        outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message}{NewLine}{Exception}")
+                    .CreateLogger();
+            }
+        }
     }
 }
