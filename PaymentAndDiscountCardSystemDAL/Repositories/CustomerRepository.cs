@@ -8,11 +8,18 @@ namespace PaymentAndDiscountCardSystem.DAL.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-
-
         private readonly List<Customer> _entities = new List<Customer>();
 
         public List<Customer> Entities => _entities;
+
+        public CustomerRepository(List<Customer> customers)
+        {
+            _entities = customers;
+        }
+        public CustomerRepository()
+        {
+            _entities = new List<Customer>();
+        }
 
         public async Task<bool> Create(Customer entity)
         {

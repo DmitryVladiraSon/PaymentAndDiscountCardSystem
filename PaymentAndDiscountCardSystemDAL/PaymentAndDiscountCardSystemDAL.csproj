@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PaymentAndDiscountCardSystem.Domain\PaymentAndDiscountCardSystem.Domain.csproj" />
+    <ProjectReference Include="..\PaymentAndDiscountCardSystemDomain\PaymentAndDiscountCardSystemDomain.csproj" />
   </ItemGroup>
 
 </Project>

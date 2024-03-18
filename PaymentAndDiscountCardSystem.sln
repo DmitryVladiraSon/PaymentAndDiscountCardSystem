@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystem", "PaymentAndDiscountCardSystem.csproj", "{09C82F49-E5C7-4D08-92DD-E5502A7DCF38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystem", "PaymentAndDiscountCardSystemConsoleApp\PaymentAndDiscountCardSystem.csproj", "{09C82F49-E5C7-4D08-92DD-E5502A7DCF38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{2509E8F9-E45F-48A5-8F11-4C94524138D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{D8F8A9FD-514A-4A1B-A3B1-0A43E71C0A8B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystem.Domain", "PaymentAndDiscountCardSystem.Domain\PaymentAndDiscountCardSystem.Domain.csproj", "{8136F4D9-8B77-47C7-9393-4AD2E71916C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemDomain", "PaymentAndDiscountCardSystemDomain\PaymentAndDiscountCardSystemDomain.csproj", "{8136F4D9-8B77-47C7-9393-4AD2E71916C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystem.Service", "PaymentAndDiscountCardSystem.Service\PaymentAndDiscountCardSystem.Service.csproj", "{B27E44EB-4288-49E2-A0D0-F8D68FFD95B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemService", "PaymentAndDiscountCardSystemService\PaymentAndDiscountCardSystemService.csproj", "{B27E44EB-4288-49E2-A0D0-F8D68FFD95B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{490269C5-2402-40BB-AC04-7B8A25B5F9BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentAndDiscountCardSystem.DAL", "PaymentAndDiscountCardSystem.DAL\PaymentAndDiscountCardSystem.DAL.csproj", "{4B14D31F-0281-4DE6-9EE9-90BE7A0BD9A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemDAL", "PaymentAndDiscountCardSystemDAL\PaymentAndDiscountCardSystemDAL.csproj", "{4B14D31F-0281-4DE6-9EE9-90BE7A0BD9A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

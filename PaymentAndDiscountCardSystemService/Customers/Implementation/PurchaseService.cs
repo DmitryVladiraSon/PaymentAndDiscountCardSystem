@@ -5,11 +5,10 @@ using PaymentAndDiscountCardSystem.DAL.Interfaces;
 using PaymentAndDiscountCardSystem.DAL.Repositories;
 using PaymentAndDiscountCardSystem.Domain.Entity;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
-using PaymentAndDiscountCardSystem.Service.Interfaces;
 
-namespace PaymentAndDiscountCardSystem.Service.Implementation
+namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
 {
-    internal class PurchaseService : IPurchaseService
+    public class PurchaseService : IPurchaseService
     {
         private CustomerService _customerService;
         private ICustomerRepository _customersRepo;
@@ -19,9 +18,9 @@ namespace PaymentAndDiscountCardSystem.Service.Implementation
             _customersRepo = customers;
             _logger = logger;
         }
-        public async void Purchase(Guid id, decimal amount)
+        public async void Purchase(Guid customerId, decimal amount)
         {
-            var customer = await _customersRepo.Get(id);
+            var customer = await _customersRepo.Get(customerId);
 
             AddingDiscountCardsToCustomer(customer);
             var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).Where(card => card.IsActive).FirstOrDefault();

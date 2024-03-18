@@ -12,7 +12,6 @@ namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
         Transistor,
         Integrated,
         Quantum,
-        Cyclic,
-        Cheerful
+        FunnyCard
     }
 }

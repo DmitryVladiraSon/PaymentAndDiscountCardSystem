@@ -3,10 +3,10 @@ using Microsoft.Extensions.Logging;
 using PaymentAndDiscountCardSystem.DAL.Interfaces;
 using PaymentAndDiscountCardSystem.DAL.Repositories;
 using PaymentAndDiscountCardSystem.Domain.Entity;
-using PaymentAndDiscountCardSystem.Service.Implementation;
-using PaymentAndDiscountCardSystem.Service.Interfaces;
+using PaymentAndDiscountCardSystem.Service.Customers.Implementation;
+using PaymentAndDiscountCardSystemService.Customers.Implementation;
+using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 using Serilog;
-using Serilog.Core;
 using System.Runtime.CompilerServices;
 
 namespace PaymentAndDiscountCardSystem
@@ -15,6 +15,9 @@ namespace PaymentAndDiscountCardSystem
     {
         static void Main(string[] args)
         {
+
+            var customerRepositoryList = new List<Customer>();
+
             var log = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogFiles", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}", "Log.txt"),
@@ -26,20 +29,24 @@ namespace PaymentAndDiscountCardSystem
     .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
-            var services = new ServiceCollection() 
-                .AddSingleton<ICustomerRepository,CustomerRepository>()
-                .AddSingleton<ICustomerService, CustomerService>()
-                .AddSingleton<IPurchaseService,PurchaseService>()
-                .AddSingleton<List<Customer>>() // Delete THIS ?
-        .AddLogging(loggingBuilder =>
-        {
-            loggingBuilder.AddSerilog(log);
-        });
+            var services = new ServiceCollection()
+    .AddSingleton<ICustomerRepository>(serviceProvider =>
+    {
+        return new CustomerRepository();
+    })
+    .AddSingleton<ICreateCustomerService,CreateCustomerService>()
+    .AddSingleton<IGetCustomerService, GetCustomerService>()
+    .AddSingleton<ICustomerService, CustomerService>()
+    .AddSingleton<IPurchaseService, PurchaseService>()
+    .AddLogging(loggingBuilder =>
+    {
+        loggingBuilder.AddSerilog(log);
+    });
 
 
 
 
-            using var providerService = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
 
             //Define the path to the text file
             string logFilePath = "console_log.txt";
@@ -80,21 +87,24 @@ namespace PaymentAndDiscountCardSystem
 
             //Initializing console logging
             ILoggerFactory loggerFactory = LoggerFactory.Create(builder => // Шо за логгер Factory
-            { 
+            {
                 builder.AddConsole();
             });
 
-            
+
             //Services
-             var customerService = providerService.GetService<ICustomerService>();
-            IPurchaseService purchaseService = providerService.GetService<IPurchaseService>();
+            var customerService = serviceProvider.GetService<ICustomerService>();
 
-            Customer customer1 = new Customer("Dima", "pass") ;
-            customerService.Add(customer1);
+            IGetCustomerService getCustomerService = serviceProvider.GetService<IGetCustomerService>();
+            ICreateCustomerService createCustomerService = serviceProvider.GetService<ICreateCustomerService>();
+            IPurchaseService purchaseService = serviceProvider.GetService<IPurchaseService>();
 
-           //var  = customerService.GetByName("Dima");
+            Customer customer1 = new Customer("Dima", "pass");
+            createCustomerService.Add(customer1);
 
-            Guid authorizedUserId = Autorization(customerService);
+            //var  = customerService.GetByName("Dima");
+
+            Guid authorizedUserId = Autorization(getCustomerService, createCustomerService);
 
             while (true)
             {
@@ -107,8 +117,8 @@ namespace PaymentAndDiscountCardSystem
                         "1.Начать покупки\n" +
                         "2.Выдать веселую карту\n" +
                         "3.Аннулировать циклическую карту\n" +
-                     //   "4.Данные о картах магазина\n" +
-                   //     "5.Данные о пользователе\n" +
+                        //   "4.Данные о картах магазина\n" +
+                        //     "5.Данные о пользователе\n" +
                         "4.Данные о пользователе\n" +
                         "Введите цифру действия и нажмите Enter: ");
                     string writingMess = Console.ReadLine();
@@ -119,17 +129,17 @@ namespace PaymentAndDiscountCardSystem
                             RunSession(() => ProcessPurchase(authorizedUserId, purchaseService));
                             break;
                         case "2":
-                            var customer = customerService.GetById(authorizedUserId);
+                            var customer = getCustomerService.GetById(authorizedUserId);
                             customerService.GetCustomerFunnyCard(customer);
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine($"Клиенту {customer.Name} выдана веселая карта");
                             Console.ResetColor();
                             break;
                         case "3":
-                            Console.WriteLine( );
+                            Console.WriteLine();
                             break;
                         case "4":
-                            Console.WriteLine( );
+                            Console.WriteLine();
                             break;
                         default:
                             break;
@@ -139,12 +149,12 @@ namespace PaymentAndDiscountCardSystem
                 else
                 {
                     Console.WriteLine("Клавиша Escape нажата. Программа завершает работу.");
-                    break; 
+                    break;
                 }
             }
         }
 
-        static Guid Autorization(ICustomerService customerService)
+        private static Guid Autorization(IGetCustomerService getCustomerService, ICreateCustomerService createCustomerService)
         {
             const int minLengthSize = 2;
 
@@ -158,26 +168,31 @@ namespace PaymentAndDiscountCardSystem
                 name = Console.ReadLine();
 
             }
-            var customer = customerService.GetByName(name); 
+            var customer = getCustomerService.GetByName(name);
 
             if (customer != null)
             {
                 Console.WriteLine($"HI {customer.Name} | {customer.AccumulatedAmount} $");
-            } 
+            }
             else
-            { 
-                customerService.Add(new Customer(name,"pass"));
-                customer = customerService.GetByName(name);
+            {
+                createCustomerService.Add(new Customer(name, "pass"));
+                customer = getCustomerService.GetByName(name);
                 Console.WriteLine($"Hello {customer.Name} | {customer.AccumulatedAmount} $");
             }
-           
+
             return customer.Id;
         }
 
-        static void ProcessPurchase(Guid id, IPurchaseService purchaseService)
+        private static void ProcessPurchase(Guid id, IPurchaseService purchaseService)
         {
+            if (purchaseService is null)
+            {
+                throw new ArgumentNullException(nameof(purchaseService));
+            }
+
             decimal amount;
-            
+
             Console.Write("Введите сумму: ");
             // Считываем ввод пользователя и пытаемся преобразовать его в десятичное число
             if (decimal.TryParse(Console.ReadLine(), out amount) && amount > 0)
@@ -190,7 +205,7 @@ namespace PaymentAndDiscountCardSystem
             }
         }
 
-        static void RunSession(params Action[] actions)
+        private static void RunSession(params Action[] actions)
         {
             while (true)
             {
@@ -206,7 +221,7 @@ namespace PaymentAndDiscountCardSystem
                 else
                 {
                     Console.WriteLine("Возвращение на главное меню. Нажмите Enter");
-                    break; 
+                    break;
                 }
 
             }

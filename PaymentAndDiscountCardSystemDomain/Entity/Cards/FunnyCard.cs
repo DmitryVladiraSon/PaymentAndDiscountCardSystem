@@ -12,7 +12,7 @@ namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
         public FunnyCard( int discountRate) : base(discountRate)
         {
             DiscountsDays = GetRandomDaysInMonth(DiscountsDays);
-            Type = DiscountCardType.Cheerful;
+            Type = DiscountCardType.FunnyCard;
         }
         
         public DateTime[] DiscountsDays { get; set; } = new DateTime[10];
