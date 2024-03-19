@@ -18,138 +18,87 @@ namespace PaymentAndDiscountCardSystem
     {
         static void Main(string[] args)
         {
-            var fileLogger = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogFiles", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}", "Log.txt"),
-                    rollingInterval: RollingInterval.Day,
-                    outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message}{NewLine}{Exception}")
-                .CreateLogger();
-
-    //var log1 = new LoggerConfiguration()
-    //.WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
-    //.CreateLogger();
-
-            var services = new ServiceCollection()
-    .AddSingleton<ICustomerRepository>(serviceProvider =>
-    {
-        return new CustomerRepository();
-    })
-    .AddSingleton<IDiscountCardRepository,DiscountCardRepository>()
-    .AddSingleton<ICreateCustomerService,CreateCustomerService>()
-    .AddSingleton<IGetCustomerService, GetCustomerService>()
-    .AddSingleton<ICustomerService, CustomerService>()
-    .AddSingleton<IAddCardService, AddCardService>()
-    .AddSingleton<IPurchaseService, PurchaseService>()
-    .AddLogging(loggingBuilder =>
-    {
-        loggingBuilder.AddSerilog(fileLogger);
-    });
-
-
-
-
-            using var serviceProvider = services.BuildServiceProvider();
-
-            ////Define the path to the text file
-            //string logFilePath = "console_log.txt";
-
-            ////Create a StreamWriter to write logs to a text file
-            //using (StreamWriter logFileWriter = new StreamWriter(logFilePath, append: true))
-            //{
-            //    //Create an ILoggerFactory
-            //    ILoggerFactory loggerFactoryFile = LoggerFactory.Create(builder =>
-            //    {
-            //        //Add console output
-            //        builder.AddSimpleConsole(options =>
-            //        {
-            //            options.IncludeScopes = true;
-            //            options.SingleLine = true;
-            //            options.TimestampFormat = "HH:mm:ss ";
-            //        });
-
-            //        //Add a custom log provider to write logs to text files
-            //        builder.AddProvider(new CustomFileLoggerProvider(logFileWriter));
-            //    });
-
-            //    //Create an ILogger
-            //    ILogger<Program> logger = loggerFactoryFile.CreateLogger<Program>();
-
-            //    // Output some text on the console
-            //    using (logger.BeginScope("[scope is enabled]"))
-            //    {
-            //        logger.LogInformation("Hello World!");
-            //        logger.LogInformation("Logs contain timestamp and log level.");
-            //        logger.LogInformation("Each log message is fit in a single line.");
-            //    }
-            //}
-
-
-
-
+            var startup = new Startup();
+            startup.ConfigureServices();
 
             //Initializing console logging
             ILoggerFactory loggerFactory = LoggerFactory.Create(builder => // Шо за логгер Factory
             {
                 builder.AddConsole();
             });
+            //Services Customers
+            var getCustomerService = startup.ServiceProvider.GetService<IGetCustomerService>();
+            var createCustomerService = startup.ServiceProvider.GetService<ICreateCustomerService>();
+            var purchaseService = startup.ServiceProvider.GetService<IPurchaseService>();
+            //Card services
+            var addCardService = startup.ServiceProvider.GetService<IAddCardService>();
+            var hasCardService = startup.ServiceProvider.GetService<IHasCardService>();
+            var deleteCardService = startup.ServiceProvider.GetService<IDeleteCardService>();
+            var dataInitializer = startup.ServiceProvider.GetService<DataInitializer>();
 
-
-            //Services
-            var customerService = serviceProvider.GetService<ICustomerService>();
-
-            IGetCustomerService getCustomerService = serviceProvider.GetService<IGetCustomerService>();
-            ICreateCustomerService createCustomerService = serviceProvider.GetService<ICreateCustomerService>();
-            IPurchaseService purchaseService = serviceProvider.GetService<IPurchaseService>();
-            IAddCardService addCardService = serviceProvider.GetService<IAddCardService>();
-
-            Customer customer1 = new Customer("Dima");
-            createCustomerService.Add(customer1);
-            addCardService.ToCustomer(customer1, DiscountCardType.Tube);
-            addCardService.ToCustomer(customer1, DiscountCardType.Tube);
-            addCardService.ToCustomer(customer1, DiscountCardType.Tube);
-            //var  = customerService.GetByName("Dima");
-
-            Guid authorizedUserId = Autorization(getCustomerService, createCustomerService);
+            dataInitializer.Initialize();
 
             while (true)
             {
-                Console.WriteLine("Главное меню. Нажмите Enter");
-                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                Console.WriteLine("Authorization. Press Enter");
+                ConsoleKeyInfo authorizationKeyInfo = Console.ReadKey(true);
                 Console.Clear();
-                if (keyInfo.Key != ConsoleKey.Escape)
+                if (authorizationKeyInfo.Key != ConsoleKey.Escape)
                 {
-                    Console.Write("Выберите действие:\n" +
-                        "1.Начать покупки\n" +
-                        "2.Выдать веселую карту\n" +
-                        "3.Аннулировать циклическую карту\n" +
-                        //   "4.Данные о картах магазина\n" +
-                        //     "5.Данные о пользователе\n" +
-                        "4.Данные о пользователе\n" +
-                        "Введите цифру действия и нажмите Enter: ");
-                    string writingMess = Console.ReadLine();
-                    Console.Clear();
-                    switch (writingMess)
-                    {
-                        case "1":
-                            RunSession(() => ProcessPurchase(authorizedUserId, purchaseService));
-                            break;
-                        case "2":
-                            var customer = getCustomerService.GetById(authorizedUserId);
-                            customerService.GetCustomerFunnyCard(customer);
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"Клиенту {customer.Name} выдана веселая карта");
-                            Console.ResetColor();
-                            break;
-                        case "3":
-                            Console.WriteLine();
-                            break;
-                        case "4":
-                            Console.WriteLine();
-                            break;
-                        default:
-                            break;
-                    }
+                    Guid authorizedUserId = Autorization(getCustomerService, createCustomerService);
+                    bool mainMenuSession = true;
+                    var customer = getCustomerService.GetById(authorizedUserId);
 
+                    while (mainMenuSession)
+                    {
+                        
+                        Console.WriteLine("The main menu. Press Enter");
+                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                        Console.Clear();
+                        if (keyInfo.Key != ConsoleKey.Escape)
+                        {
+                            Console.Write("Choose an action:\n" +
+                                            "1.Start shopping\n" +
+                                            "2.Issue/pick up a card a FUNNY card\n" +
+                                            "3.Issue/pick up a card a QUANTUM card\n" +
+                                            "4.User information \n" +
+                                            "5.Go to Authorization\n" +
+                                            "Enter the action number and press Enter:");
+                            string writingMess = Console.ReadLine();
+                            Console.Clear();
+                            switch (writingMess)
+                            {
+                                case "1": //Start shopping
+                                    RunSession(() => ProcessPurchase(authorizedUserId, purchaseService));
+                                    break;
+                                case "2": //Issue/pick up a card a fun card
+                                    IssueOrPickUpCardFromCustomer(customer, DiscountCardType.FunnyCard, hasCardService, deleteCardService, addCardService);
+                                    break;
+                                case "3": //Issue/pick up a card a QUANTUM card
+                                    IssueOrPickUpCardFromCustomer(customer, DiscountCardType.Quantum, hasCardService, deleteCardService, addCardService);
+                                    break;
+                                case "4": //User information
+                                    Console.WriteLine($"{customer.Name}");
+                                    Console.WriteLine($"{customer.AccumulatedAmount}");
+                                    Console.WriteLine($"Cards:");
+                                    foreach (Card card in customer.Cards)
+                                    {
+                                        Console.WriteLine($"{card.Type} {card.DiscountRate}");
+                                    }
+                                    break;
+                                case "5": //Go to autorization
+                                    mainMenuSession = false;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Клавиша Escape нажата. Return to Authorization");
+                            break;
+                        }
+                    }
                 }
                 else
                 {
@@ -158,7 +107,7 @@ namespace PaymentAndDiscountCardSystem
                 }
             }
         }
-
+           
         private static Guid Autorization(IGetCustomerService getCustomerService, ICreateCustomerService createCustomerService)
         {
             const int minLengthSize = 2;
@@ -183,13 +132,13 @@ namespace PaymentAndDiscountCardSystem
             {
                 createCustomerService.Add(new Customer(name));
                 customer = getCustomerService.GetByName(name);
-                Console.WriteLine($"Hello {customer.Name} | {customer.AccumulatedAmount} $");
+                Console.WriteLine($"Hello new customer! {customer.Name}");
             }
 
             return customer.Id;
         }
 
-        private static void ProcessPurchase(Guid id, IPurchaseService purchaseService)
+        private static void ProcessPurchase(Guid CustomerId, IPurchaseService purchaseService)
         {
             if (purchaseService is null)
             {
@@ -202,8 +151,8 @@ namespace PaymentAndDiscountCardSystem
             // Считываем ввод пользователя и пытаемся преобразовать его в десятичное число
             if (decimal.TryParse(Console.ReadLine(), out amount) && amount > 0)
             {
-                purchaseService.Purchase(id, amount);
-                Console.WriteLine();
+                purchaseService.Purchase(CustomerId, amount);
+                Console.Write("Description about customer and operation");
             }
             else
             {
@@ -217,104 +166,37 @@ namespace PaymentAndDiscountCardSystem
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
 
-                if (keyInfo.Key != ConsoleKey.Escape)
+                if (keyInfo.Key != ConsoleKey.Backspace)
                 {
                     foreach (var action in actions)
                     {
-                        action(); // Выполняем все переданные функции
+                        action(); 
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Возвращение на главное меню. Нажмите Enter");
+                    Console.WriteLine("Return to the main menu. Press Enter");
                     break;
                 }
-
             }
         }
 
-        //// Customized ILoggerProvider, writes logs to text files
-        //public class CustomFileLoggerProvider : ILoggerProvider
-        //{
-        //    private readonly StreamWriter _logFileWriter;
-
-        //    public CustomFileLoggerProvider(StreamWriter logFileWriter)
-        //    {
-        //        _logFileWriter = logFileWriter ?? throw new ArgumentNullException(nameof(logFileWriter));
-        //    }
-
-        //    public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName)
-        //    {
-        //        return new CustomFileLogger(categoryName, _logFileWriter);
-        //    }
-
-        //    public void Dispose()
-        //    {
-        //        _logFileWriter.Dispose();
-        //    }
-        //}
-
-        //// Customized ILogger, writes logs to text files
-        //public class CustomFileLogger : Microsoft.Extensions.Logging.ILogger
-        //{
-        //    private readonly string _categoryName;
-        //    private readonly StreamWriter _logFileWriter;
-
-        //    public CustomFileLogger(string categoryName, StreamWriter logFileWriter)
-        //    {
-        //        _categoryName = categoryName;
-        //        _logFileWriter = logFileWriter;
-        //    }
-
-        //    public IDisposable BeginScope<TState>(TState state)
-        //    {
-        //        return null;
-        //    }
-
-        //    public bool IsEnabled(LogLevel logLevel)
-        //    {
-        //        // Ensure that only information level and higher logs are recorded
-        //        return logLevel >= LogLevel.Information;
-        //    }
-
-        //    public void Log<TState>(
-        //        LogLevel logLevel,
-        //        EventId eventId,
-        //        TState state,
-        //        Exception exception,
-        //        Func<TState, Exception, string> formatter)
-        //    {
-        //        // Ensure that only information level and higher logs are recorded
-        //        if (!IsEnabled(logLevel))
-        //        {
-        //            return;
-        //        }
-
-        //        // Get the formatted log message
-        //        var message = formatter(state, exception);
-
-        //        //Write log messages to text file
-        //        _logFileWriter.WriteLine($"[{logLevel}] [{_categoryName}] {message}");
-        //        _logFileWriter.Flush();
-        //    }
-        //}
-        //public class SetupLogging
-        //{
-        //    [ModuleInitializer]
-        //    public static void Init()
-        //    {
-        //        Initialize();
-        //    }
-        //    public static void Initialize()
-        //    {
-
-        //        Log.Logger = new LoggerConfiguration()
-        //            .MinimumLevel.Verbose()
-        //            .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogFiles", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}", "Log.txt"),
-        //                rollingInterval: RollingInterval.Infinite,
-        //                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message}{NewLine}{Exception}")
-        //            .CreateLogger();
-        //    }
-        //}
+        private static void IssueOrPickUpCardFromCustomer(Customer customer, DiscountCardType gettingCardType, IHasCardService hasCardService, IDeleteCardService deleteCardService, IAddCardService addCardService)
+        {
+            if (hasCardService.FromCustomer(customer, gettingCardType))
+            {
+                deleteCardService.FromCustomer(customer, gettingCardType);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"To the client {customer.Name} the card {gettingCardType} has been deleted");
+                Console.ResetColor();
+            }
+            else
+            {
+                addCardService.ToCustomer(customer, gettingCardType);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"To the client {customer.Name} a card {gettingCardType} has been issued");
+                Console.ResetColor();
+            }
+        }
     }
 }

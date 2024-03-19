@@ -32,11 +32,26 @@ namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
 
             AddingDiscountCardsToCustomer(customer);
 
-            var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).FirstOrDefault();
+            //Get discount
             int discount = 0;
-            if (priorityCard != null)
+
+            var timeLimitedCard = customer.Cards.Where(c => c.GetType() == typeof(QuantumCard))
+                                                .Select(x => (QuantumCard)x).ToList()
+                                                .Where(x=> x.IsExpired() == true)
+                                                .FirstOrDefault();
+
+            if (timeLimitedCard != null)
             {
-                discount = priorityCard.DiscountRate;
+                discount = timeLimitedCard.DiscountRate;
+            }
+            else
+            {
+                var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).FirstOrDefault();
+
+                if (priorityCard != null)
+                {
+                    discount = priorityCard.DiscountRate;
+                }
             }
             
             var amountWithDiscount = amount - (amount / 100 * discount);

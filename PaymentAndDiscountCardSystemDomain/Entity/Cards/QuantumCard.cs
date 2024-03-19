@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
 {
     public class QuantumCard : Card
@@ -16,27 +11,22 @@ namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
             creationDate = DateTime.Now;
             Type = DiscountCardType.Quantum;
         }
+
         public bool IsExpired()
         {
-            // Получаем текущую дату
             DateTime currentDate = DateTime.Now;
 
-            // Добавляем 180 дней к дате создания
             DateTime expirationDate = creationDate.AddDays(VALIDITY_PERIOD);
 
-            // Если текущая дата больше или равна дате истечения срока, возвращаем true
             return currentDate >= expirationDate;
         }
 
         public int GetDaysBeforeExpirationDate()
         {
-            // Получаем текущую дату
             DateTime currentDate = DateTime.Now;
 
-            // Добавляем 180 дней к дате создания
             DateTime expirationDate = creationDate.AddDays(VALIDITY_PERIOD);
 
-            // Возвращаем количество дней до истечения срока
             TimeSpan difference = expirationDate - currentDate;
             return (int)difference.TotalDays;
         }

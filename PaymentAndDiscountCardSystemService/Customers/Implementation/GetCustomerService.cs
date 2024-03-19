@@ -47,10 +47,5 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
                 return customer;
             }
         }
-
-        public Task<Customer?> GetByNameAsync(string name)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

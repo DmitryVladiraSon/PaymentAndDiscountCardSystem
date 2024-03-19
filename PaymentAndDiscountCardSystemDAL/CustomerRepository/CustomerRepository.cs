@@ -32,15 +32,15 @@ namespace PaymentAndDiscountCardSystemDAL.CustomerRepository
             throw new NotImplementedException();
         }
 
-public async Task<Customer> Get(Guid id)
-{
-    var customer = _entities.FirstOrDefault(c => c.Id == id);
-    if (customer == null)
-    {
-        throw new Exception($"Customer with id {id} not found.");
-    }
-    return customer;
-}
+        public async Task<Customer> Get(Guid id)
+        {
+            var customer = _entities.FirstOrDefault(c => c.Id == id);
+            if (customer == null)
+            {
+                throw new Exception($"Customer with id {id} not found.");
+            }
+            return customer;
+        }
 
         public Customer GetByName(string name)
         {

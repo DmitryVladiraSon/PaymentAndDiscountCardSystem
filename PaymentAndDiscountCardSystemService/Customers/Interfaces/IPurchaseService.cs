@@ -2,6 +2,6 @@
 {
     public interface IPurchaseService
     {
-        void Purchase(Guid id, decimal amount);
+        void Purchase(Guid customerId, decimal amount);
     }
 }

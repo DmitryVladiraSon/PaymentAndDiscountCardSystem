@@ -13,10 +13,10 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
 {
     public class CreateCustomerService : ICreateCustomerService
     {
-        private readonly ILogger<CustomerService> _logger;
+        private readonly ILogger<CreateCustomerService> _logger;
         private readonly ICustomerRepository _customerRepository;
 
-        public CreateCustomerService(ICustomerRepository customerRepository, ILogger<CustomerService> logger)
+        public CreateCustomerService(ICustomerRepository customerRepository, ILogger<CreateCustomerService> logger)
         {
             _customerRepository = customerRepository;
             _logger = logger; ;
