@@ -1,5 +1,6 @@
-﻿using PaymentAndDiscountCardSystem.Domain.Entity;
+﻿using Microsoft.Extensions.Logging;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 using System;
@@ -13,30 +14,37 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
     internal class GetCardService : IGetCardService
     {
         private readonly IGetCustomerService _getCustomerService;
+        private readonly ILogger _logger;
+
+        public GetCardService(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public Card ByCardType(DiscountCardType type)
         {
             switch (type)
             {
                 case DiscountCardType.Tube:
-                    return new DiscountCard(DiscountCardType.Tube,5000, 5);
+                    return new DiscountCard(DiscountCardType.Tube);
 
                 case DiscountCardType.Transistor:
-                    return new DiscountCard(DiscountCardType.Transistor, 12500, 10);
+                    return new DiscountCard(DiscountCardType.Transistor );
 
                 case DiscountCardType.Integrated:
-                    return new DiscountCard(DiscountCardType.Integrated, 25000, 15);
+                    return new DiscountCard(DiscountCardType.Integrated);
 
                 case DiscountCardType.Quantum:
-                    return new QuantumCard(20);
+                    return new QuantumCard();
 
                 case DiscountCardType.FunnyCard:
-                    return new FunnyCard(10);
+                    return new FunnyCard();
 
                 default:
-                    return new FunnyCard(10);
+                    return new FunnyCard();
             };
         }
-
+        
         public Card ByCustomer(Customer customer)
         {
             throw new NotImplementedException();

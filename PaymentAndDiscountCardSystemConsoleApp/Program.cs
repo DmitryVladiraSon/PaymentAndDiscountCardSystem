@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using PaymentAndDiscountCardSystem.DAL.Interfaces;
-using PaymentAndDiscountCardSystem.DAL.Repositories;
-using PaymentAndDiscountCardSystem.Domain.Entity;
+using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 using PaymentAndDiscountCardSystem.Service.Customers.Implementation;
+using PaymentAndDiscountCardSystemDAL.CustomerRepository;
+using PaymentAndDiscountCardSystemDAL.DiscountCardRepository;
+using PaymentAndDiscountCardSystemDomain.Entity.Customers;
+using PaymentAndDiscountCardSystemService.Cards.Implementation;
+using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Implementation;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 using Serilog;
@@ -34,9 +37,11 @@ namespace PaymentAndDiscountCardSystem
     {
         return new CustomerRepository();
     })
+    .AddSingleton<IDiscountCardRepository,DiscountCardRepository>()
     .AddSingleton<ICreateCustomerService,CreateCustomerService>()
     .AddSingleton<IGetCustomerService, GetCustomerService>()
     .AddSingleton<ICustomerService, CustomerService>()
+    .AddSingleton<IAddCardService, AddCardService>()
     .AddSingleton<IPurchaseService, PurchaseService>()
     .AddLogging(loggingBuilder =>
     {
@@ -98,10 +103,13 @@ namespace PaymentAndDiscountCardSystem
             IGetCustomerService getCustomerService = serviceProvider.GetService<IGetCustomerService>();
             ICreateCustomerService createCustomerService = serviceProvider.GetService<ICreateCustomerService>();
             IPurchaseService purchaseService = serviceProvider.GetService<IPurchaseService>();
+            IAddCardService addCardService = serviceProvider.GetService<IAddCardService>();
 
-            Customer customer1 = new Customer("Dima", "pass");
+            Customer customer1 = new Customer("Dima");
             createCustomerService.Add(customer1);
-
+            addCardService.ToCustomer(customer1, DiscountCardType.Tube);
+            addCardService.ToCustomer(customer1, DiscountCardType.Tube);
+            addCardService.ToCustomer(customer1, DiscountCardType.Tube);
             //var  = customerService.GetByName("Dima");
 
             Guid authorizedUserId = Autorization(getCustomerService, createCustomerService);
@@ -176,7 +184,7 @@ namespace PaymentAndDiscountCardSystem
             }
             else
             {
-                createCustomerService.Add(new Customer(name, "pass"));
+                createCustomerService.Add(new Customer(name));
                 customer = getCustomerService.GetByName(name);
                 Console.WriteLine($"Hello {customer.Name} | {customer.AccumulatedAmount} $");
             }

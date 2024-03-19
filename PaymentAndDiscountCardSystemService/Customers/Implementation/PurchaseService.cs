@@ -1,66 +1,62 @@
 ﻿
 
 using Microsoft.Extensions.Logging;
-using PaymentAndDiscountCardSystem.DAL.Interfaces;
-using PaymentAndDiscountCardSystem.DAL.Repositories;
-using PaymentAndDiscountCardSystem.Domain.Entity;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystemDAL.DiscountCardRepository;
+using PaymentAndDiscountCardSystemDomain.Entity.Customers;
+using PaymentAndDiscountCardSystemService.Cards.Interfaces;
+using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 
 namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
 {
     public class PurchaseService : IPurchaseService
     {
-        private CustomerService _customerService;
-        private ICustomerRepository _customersRepo;
+        private readonly IGetCustomerService _getCustomerService;
+        private readonly IDiscountCardRepository _discountCardRepository;
+        private readonly IAddCardService _addCardService;
         private readonly ILogger<PurchaseService> _logger;
-        public PurchaseService(ICustomerRepository customers,ILogger<PurchaseService> logger)
+        public PurchaseService(
+            IGetCustomerService getCustomerService,
+            IAddCardService addCardService,
+            IDiscountCardRepository discountCardRepository,
+            ILogger<PurchaseService> logger)
         {
-            _customersRepo = customers;
+            _discountCardRepository = discountCardRepository;
+            _getCustomerService = getCustomerService;
+            _addCardService = addCardService;
             _logger = logger;
         }
-        public async void Purchase(Guid customerId, decimal amount)
+        public void Purchase(Guid customerId, decimal amount)
         {
-            var customer = await _customersRepo.Get(customerId);
+            var customer = _getCustomerService.GetById(customerId);
 
             AddingDiscountCardsToCustomer(customer);
-            var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).Where(card => card.IsActive).FirstOrDefault();
+
+            var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).FirstOrDefault();
             int discount = 0;
             if (priorityCard != null)
             {
                 discount = priorityCard.DiscountRate;
             }
+            
             var amountWithDiscount = amount - (amount / 100 * discount);
             customer.AccumulatedAmount += amount;
 
-            Console.WriteLine($"amount {amount} with discount {discount}% = {amountWithDiscount} | Accumulated amount {customer.AccumulatedAmount}");
             _logger.LogInformation($"amount {amount} with discount {discount}% = {amountWithDiscount} | Accumulated amount {customer.AccumulatedAmount}");
-            
-            customer.AccumulatedAmount += amount;
+
         }
-
-
 
         private void AddingDiscountCardsToCustomer(Customer customer)
         {
-            try
+            foreach (var discountCard in _discountCardRepository.Entities
+                                            .Where(c => c.GetType() == typeof(DiscountCard))
+                                            .Select(x => (DiscountCard)x).ToList())
             {
-                foreach (DiscountCard discountCard in customer.Cards)
+                if (discountCard.ThresholdAmount == customer.AccumulatedAmount)
                 {
-                    if (customer.AccumulatedAmount > discountCard.ThresholdAmount)
-                    {
-                        discountCard.IsActive = true;
-                    }
+                    _addCardService.ToCustomer(customer, discountCard.Type);
                 }
             }
-            catch (InvalidCastException ex)
-            {
-                //В логи записать, что-то, но пока сам не знаю, что ;)
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
         }
-
     }
 }

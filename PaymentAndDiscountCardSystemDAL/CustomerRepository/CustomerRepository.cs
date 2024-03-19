@@ -1,10 +1,7 @@
-﻿using PaymentAndDiscountCardSystem.DAL.Interfaces;
-using PaymentAndDiscountCardSystem.Domain.Entity;
-using System;
+﻿using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using System.Collections;
-using System.Xml.Linq;
 
-namespace PaymentAndDiscountCardSystem.DAL.Repositories
+namespace PaymentAndDiscountCardSystemDAL.CustomerRepository
 {
     public class CustomerRepository : ICustomerRepository
     {
@@ -21,25 +18,16 @@ namespace PaymentAndDiscountCardSystem.DAL.Repositories
             _entities = new List<Customer>();
         }
 
-        public async Task<bool> Create(Customer entity)
+        public void Create(Customer entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
-
-            try
-            {
-                _entities.Add(entity);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            _entities.Add(entity);
         }
 
-        public Task<bool> Delete(Customer entity)
+        public void Delete(Customer entity)
         {
             throw new NotImplementedException();
         }
@@ -54,7 +42,7 @@ public async Task<Customer> Get(Guid id)
     return customer;
 }
 
-        public async Task<Customer> GetByName(string name)
+        public Customer GetByName(string name)
         {
             if (string.IsNullOrEmpty(name))
             {

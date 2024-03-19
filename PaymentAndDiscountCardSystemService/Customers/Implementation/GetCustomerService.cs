@@ -1,13 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using PaymentAndDiscountCardSystem.DAL.Interfaces;
-using PaymentAndDiscountCardSystem.DAL.Repositories;
-using PaymentAndDiscountCardSystem.Domain.Entity;
+using PaymentAndDiscountCardSystemDAL.CustomerRepository;
+using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PaymentAndDiscountCardSystemService.Customers.Implementation
 {
@@ -40,7 +34,10 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
 
         public Customer GetByName(string name)
         {
-            throw new NotImplementedException();
+            
+            
+            var customer = _customerRepository.GetByName(name);
+            return customer;
         }
 
         public Task<Customer?> GetByNameAsync(string name)

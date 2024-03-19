@@ -1,4 +1,4 @@
-﻿using PaymentAndDiscountCardSystem.Domain.Entity;
+﻿using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

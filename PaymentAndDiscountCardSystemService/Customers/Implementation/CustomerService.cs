@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using PaymentAndDiscountCardSystem.DAL.Interfaces;
-using PaymentAndDiscountCardSystem.Domain.Entity;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystemDAL.CustomerRepository;
+using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 
 namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
 {
@@ -46,7 +46,7 @@ namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
 
         public void GetCustomerFunnyCard(Customer customer)// Метод называется выдача карты, но по логике она активируется.
         {
-            customer.Cards.Find(c => c.Type == DiscountCardType.FunnyCard).IsActive = true;
+            customer.Cards.Add(new FunnyCard());
         }
     }
 }

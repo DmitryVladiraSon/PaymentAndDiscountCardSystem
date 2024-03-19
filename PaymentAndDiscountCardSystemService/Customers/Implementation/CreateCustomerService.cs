@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using PaymentAndDiscountCardSystem.DAL.Interfaces;
-using PaymentAndDiscountCardSystem.Domain.Entity;
 using PaymentAndDiscountCardSystem.Service.Customers.Implementation;
+using PaymentAndDiscountCardSystemDAL.CustomerRepository;
+using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 using System;
 using System.Collections.Generic;

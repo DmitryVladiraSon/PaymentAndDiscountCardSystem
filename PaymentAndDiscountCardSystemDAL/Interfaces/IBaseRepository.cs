@@ -8,15 +8,15 @@ namespace PaymentAndDiscountCardSystem.DAL.Interfaces
 {
     public interface IBaseRepository<T> : IEnumerable<T>
     {
-         List<T> Entities { get; }
+        List<T> Entities { get; }
 
-        Task<bool> Create(T entity);
+        void Create(T entity);
 
         Task<T> Get(Guid id);
 
         Task<List<T>> Select();
 
-        Task<bool> Delete(T entity);
+        void Delete(T entity);
 
         Task<T> Update(T entity);
 

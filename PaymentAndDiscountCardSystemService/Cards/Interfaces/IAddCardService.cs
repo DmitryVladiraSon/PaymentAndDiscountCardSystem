@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace PaymentAndDiscountCardSystemService.Cards.Interfaces
 {
-    internal interface IGetCardService
+    public interface IAddCardService
     {
-        Card ByCardType(DiscountCardType type);
-        Card ByCustomer(Customer customer);
+        bool ToCustomer(Customer customer, DiscountCardType cardType);
     }
 }

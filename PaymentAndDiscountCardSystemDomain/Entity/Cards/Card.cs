@@ -4,12 +4,12 @@ namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
 {
     public abstract class Card
     {
-        public Card( int discountRate)
+        public Card()
         {
-            DiscountRate = discountRate;
+            Id = Guid.NewGuid();
         }
-        public bool IsActive = false;
-        public int DiscountRate { get; private set; }
+        public Guid Id { get; set; }
+        public int DiscountRate { get; protected set; }
         public DiscountCardType Type { get; protected set; }
 
     }

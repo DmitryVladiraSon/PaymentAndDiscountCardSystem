@@ -1,5 +1,5 @@
-﻿using PaymentAndDiscountCardSystem.Domain.Entity;
-using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+﻿using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 
 
 namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation

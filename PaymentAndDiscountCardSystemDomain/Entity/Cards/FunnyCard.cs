@@ -9,9 +9,10 @@ namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
 {
     public class FunnyCard : Card
     {
-        public FunnyCard( int discountRate) : base(discountRate)
+        public FunnyCard() 
         {
             DiscountsDays = GetRandomDaysInMonth(DiscountsDays);
+            DiscountRate = 10;
             Type = DiscountCardType.FunnyCard;
         }
         

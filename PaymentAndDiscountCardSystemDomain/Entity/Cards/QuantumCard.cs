@@ -10,8 +10,9 @@ namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
     {
         public const int VALIDITY_PERIOD = 180;
         private DateTime creationDate;
-        public QuantumCard( int discountRate) : base(discountRate)
+        public QuantumCard()
         {
+            DiscountRate = 20;
             creationDate = DateTime.Now;
             Type = DiscountCardType.Quantum;
         }
