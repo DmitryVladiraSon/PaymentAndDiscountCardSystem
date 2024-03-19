@@ -43,7 +43,6 @@ namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
             customer.AccumulatedAmount += amount;
 
             _logger.LogInformation($"amount {amount} with discount {discount}% = {amountWithDiscount} | Accumulated amount {customer.AccumulatedAmount}");
-
         }
 
         private void AddingDiscountCardsToCustomer(Customer customer)
@@ -52,7 +51,7 @@ namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
                                             .Where(c => c.GetType() == typeof(DiscountCard))
                                             .Select(x => (DiscountCard)x).ToList())
             {
-                if (discountCard.ThresholdAmount == customer.AccumulatedAmount)
+                if (discountCard.ThresholdAmount <= customer.AccumulatedAmount)
                 {
                     _addCardService.ToCustomer(customer, discountCard.Type);
                 }

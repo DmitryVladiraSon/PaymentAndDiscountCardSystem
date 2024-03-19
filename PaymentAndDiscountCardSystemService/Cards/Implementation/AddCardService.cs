@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
@@ -23,54 +24,82 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
             _logger = logger;
         }
 
-        public bool ToCustomer(Customer customer, DiscountCardType cardType)
+        public void ToCustomer(Customer customer, DiscountCardType cardType)
         {
             switch (cardType)
             {
                 case DiscountCardType.Tube:
-                    
-                    foreach(Card card in customer.Cards)
+
+                    if (HasDuplicateCard(customer, cardType))
                     {
-                        if (card.Type == cardType) return false;
+                        break;
                     }
-                    customer.Cards.Add(new DiscountCard(DiscountCardType.Tube));
-                    return true;
+                    else
+                    {
+                        customer.Cards.Add(new DiscountCard(DiscountCardType.Tube));
+                        break;
+                    }
 
                 case DiscountCardType.Transistor:
                     //Check duplicate 
-                    foreach (Card card in customer.Cards)
+                    if (HasDuplicateCard(customer, cardType))
                     {
-                        if (card.Type == cardType) return false; 
+                        break;
                     }
-                    customer.Cards.Add(new DiscountCard(DiscountCardType.Transistor));
-                    return true;
+                    else
+                    {
+                        customer.Cards.Add(new DiscountCard(DiscountCardType.Transistor));
+                        break;
+                    }
 
                 case DiscountCardType.Integrated:
-                    foreach (Card card in customer.Cards)
+                    if (HasDuplicateCard(customer, cardType))
                     {
-                        if (card.Type == cardType) return false;
+                        break;
                     }
-                    customer.Cards.Add(new DiscountCard(DiscountCardType.Integrated));
-                    return true;
+                    else
+                    {
+                        customer.Cards.Add(new DiscountCard(DiscountCardType.Integrated));
+                        break;
+                    }
 
                 case DiscountCardType.Quantum:
-                    foreach (Card card in customer.Cards)
+                    if (HasDuplicateCard(customer, cardType))
                     {
-                        if (card.Type == cardType) return false;
+                        break;
                     }
-                    customer.Cards.Add(new QuantumCard());
-                    return true;
+                    else
+                    {
+                        customer.Cards.Add(new DiscountCard(DiscountCardType.Quantum));
+                        break;
+                    }
 
                 case DiscountCardType.FunnyCard:
-                    foreach (Card card in customer.Cards)
+                    if (HasDuplicateCard(customer, cardType))
                     {
-                        if (card.Type == cardType) return false;
+                        break;
                     }
-                    customer.Cards.Add(new FunnyCard());
-                    return true;
+                    else
+                    {
+                        customer.Cards.Add(new DiscountCard(DiscountCardType.FunnyCard));
+                        break;
+                    }
                 default:
-                    return false;
+                    break;
             };
+        }
+
+        public bool HasDuplicateCard(Customer customer, DiscountCardType checkedCardType)
+        {
+            foreach (Card card in customer.Cards)
+            {
+                if (card.Type == checkedCardType)
+                {
+                    _logger.LogInformation($"Customer {customer.Name} | {customer.Id} already have card {checkedCardType}");
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

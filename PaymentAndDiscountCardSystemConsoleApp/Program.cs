@@ -18,19 +18,16 @@ namespace PaymentAndDiscountCardSystem
     {
         static void Main(string[] args)
         {
-
-            var customerRepositoryList = new List<Customer>();
-
-            var log = new LoggerConfiguration()
+            var fileLogger = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogFiles", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}", "Log.txt"),
                     rollingInterval: RollingInterval.Day,
                     outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message}{NewLine}{Exception}")
                 .CreateLogger();
 
-            var log1 = new LoggerConfiguration()
-    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
+    //var log1 = new LoggerConfiguration()
+    //.WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+    //.CreateLogger();
 
             var services = new ServiceCollection()
     .AddSingleton<ICustomerRepository>(serviceProvider =>
@@ -45,7 +42,7 @@ namespace PaymentAndDiscountCardSystem
     .AddSingleton<IPurchaseService, PurchaseService>()
     .AddLogging(loggingBuilder =>
     {
-        loggingBuilder.AddSerilog(log);
+        loggingBuilder.AddSerilog(fileLogger);
     });
 
 
@@ -53,38 +50,38 @@ namespace PaymentAndDiscountCardSystem
 
             using var serviceProvider = services.BuildServiceProvider();
 
-            //Define the path to the text file
-            string logFilePath = "console_log.txt";
+            ////Define the path to the text file
+            //string logFilePath = "console_log.txt";
 
-            //Create a StreamWriter to write logs to a text file
-            using (StreamWriter logFileWriter = new StreamWriter(logFilePath, append: true))
-            {
-                //Create an ILoggerFactory
-                ILoggerFactory loggerFactoryFile = LoggerFactory.Create(builder =>
-                {
-                    //Add console output
-                    builder.AddSimpleConsole(options =>
-                    {
-                        options.IncludeScopes = true;
-                        options.SingleLine = true;
-                        options.TimestampFormat = "HH:mm:ss ";
-                    });
+            ////Create a StreamWriter to write logs to a text file
+            //using (StreamWriter logFileWriter = new StreamWriter(logFilePath, append: true))
+            //{
+            //    //Create an ILoggerFactory
+            //    ILoggerFactory loggerFactoryFile = LoggerFactory.Create(builder =>
+            //    {
+            //        //Add console output
+            //        builder.AddSimpleConsole(options =>
+            //        {
+            //            options.IncludeScopes = true;
+            //            options.SingleLine = true;
+            //            options.TimestampFormat = "HH:mm:ss ";
+            //        });
 
-                    //Add a custom log provider to write logs to text files
-                    builder.AddProvider(new CustomFileLoggerProvider(logFileWriter));
-                });
+            //        //Add a custom log provider to write logs to text files
+            //        builder.AddProvider(new CustomFileLoggerProvider(logFileWriter));
+            //    });
 
-                //Create an ILogger
-                ILogger<Program> logger = loggerFactoryFile.CreateLogger<Program>();
+            //    //Create an ILogger
+            //    ILogger<Program> logger = loggerFactoryFile.CreateLogger<Program>();
 
-                // Output some text on the console
-                using (logger.BeginScope("[scope is enabled]"))
-                {
-                    logger.LogInformation("Hello World!");
-                    logger.LogInformation("Logs contain timestamp and log level.");
-                    logger.LogInformation("Each log message is fit in a single line.");
-                }
-            }
+            //    // Output some text on the console
+            //    using (logger.BeginScope("[scope is enabled]"))
+            //    {
+            //        logger.LogInformation("Hello World!");
+            //        logger.LogInformation("Logs contain timestamp and log level.");
+            //        logger.LogInformation("Each log message is fit in a single line.");
+            //    }
+            //}
 
 
 
@@ -166,16 +163,16 @@ namespace PaymentAndDiscountCardSystem
         {
             const int minLengthSize = 2;
 
-            Console.Write("Введите имя клиента: ");
+            Console.Write("Enter the client's name: ");
             var name = Console.ReadLine();
 
             while (name.Length <= minLengthSize)
             {
-                Console.WriteLine($"Имя должно быть больше {minLengthSize} символова");
-                Console.Write("Введите имя клиента: ");
+                Console.WriteLine($"The name must be more than {minLengthSize} characters");
+                Console.Write("Enter the client's name: ");
                 name = Console.ReadLine();
-
             }
+
             var customer = getCustomerService.GetByName(name);
 
             if (customer != null)
@@ -200,16 +197,17 @@ namespace PaymentAndDiscountCardSystem
             }
 
             decimal amount;
-
-            Console.Write("Введите сумму: ");
+            
+            Console.Write("Enter the amount: ");
             // Считываем ввод пользователя и пытаемся преобразовать его в десятичное число
             if (decimal.TryParse(Console.ReadLine(), out amount) && amount > 0)
             {
                 purchaseService.Purchase(id, amount);
+                Console.WriteLine();
             }
             else
             {
-                Console.WriteLine("Некорректный ввод. Пожалуйста, введите положительное десятичное число.");
+                Console.WriteLine("Incorrect input. Please enter a positive decimal number.");
             }
         }
 
@@ -235,88 +233,88 @@ namespace PaymentAndDiscountCardSystem
             }
         }
 
-        // Customized ILoggerProvider, writes logs to text files
-        public class CustomFileLoggerProvider : ILoggerProvider
-        {
-            private readonly StreamWriter _logFileWriter;
+        //// Customized ILoggerProvider, writes logs to text files
+        //public class CustomFileLoggerProvider : ILoggerProvider
+        //{
+        //    private readonly StreamWriter _logFileWriter;
 
-            public CustomFileLoggerProvider(StreamWriter logFileWriter)
-            {
-                _logFileWriter = logFileWriter ?? throw new ArgumentNullException(nameof(logFileWriter));
-            }
+        //    public CustomFileLoggerProvider(StreamWriter logFileWriter)
+        //    {
+        //        _logFileWriter = logFileWriter ?? throw new ArgumentNullException(nameof(logFileWriter));
+        //    }
 
-            public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName)
-            {
-                return new CustomFileLogger(categoryName, _logFileWriter);
-            }
+        //    public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName)
+        //    {
+        //        return new CustomFileLogger(categoryName, _logFileWriter);
+        //    }
 
-            public void Dispose()
-            {
-                _logFileWriter.Dispose();
-            }
-        }
+        //    public void Dispose()
+        //    {
+        //        _logFileWriter.Dispose();
+        //    }
+        //}
 
-        // Customized ILogger, writes logs to text files
-        public class CustomFileLogger : Microsoft.Extensions.Logging.ILogger
-        {
-            private readonly string _categoryName;
-            private readonly StreamWriter _logFileWriter;
+        //// Customized ILogger, writes logs to text files
+        //public class CustomFileLogger : Microsoft.Extensions.Logging.ILogger
+        //{
+        //    private readonly string _categoryName;
+        //    private readonly StreamWriter _logFileWriter;
 
-            public CustomFileLogger(string categoryName, StreamWriter logFileWriter)
-            {
-                _categoryName = categoryName;
-                _logFileWriter = logFileWriter;
-            }
+        //    public CustomFileLogger(string categoryName, StreamWriter logFileWriter)
+        //    {
+        //        _categoryName = categoryName;
+        //        _logFileWriter = logFileWriter;
+        //    }
 
-            public IDisposable BeginScope<TState>(TState state)
-            {
-                return null;
-            }
+        //    public IDisposable BeginScope<TState>(TState state)
+        //    {
+        //        return null;
+        //    }
 
-            public bool IsEnabled(LogLevel logLevel)
-            {
-                // Ensure that only information level and higher logs are recorded
-                return logLevel >= LogLevel.Information;
-            }
+        //    public bool IsEnabled(LogLevel logLevel)
+        //    {
+        //        // Ensure that only information level and higher logs are recorded
+        //        return logLevel >= LogLevel.Information;
+        //    }
 
-            public void Log<TState>(
-                LogLevel logLevel,
-                EventId eventId,
-                TState state,
-                Exception exception,
-                Func<TState, Exception, string> formatter)
-            {
-                // Ensure that only information level and higher logs are recorded
-                if (!IsEnabled(logLevel))
-                {
-                    return;
-                }
+        //    public void Log<TState>(
+        //        LogLevel logLevel,
+        //        EventId eventId,
+        //        TState state,
+        //        Exception exception,
+        //        Func<TState, Exception, string> formatter)
+        //    {
+        //        // Ensure that only information level and higher logs are recorded
+        //        if (!IsEnabled(logLevel))
+        //        {
+        //            return;
+        //        }
 
-                // Get the formatted log message
-                var message = formatter(state, exception);
+        //        // Get the formatted log message
+        //        var message = formatter(state, exception);
 
-                //Write log messages to text file
-                _logFileWriter.WriteLine($"[{logLevel}] [{_categoryName}] {message}");
-                _logFileWriter.Flush();
-            }
-        }
-        public class SetupLogging
-        {
-            [ModuleInitializer]
-            public static void Init()
-            {
-                Initialize();
-            }
-            public static void Initialize()
-            {
+        //        //Write log messages to text file
+        //        _logFileWriter.WriteLine($"[{logLevel}] [{_categoryName}] {message}");
+        //        _logFileWriter.Flush();
+        //    }
+        //}
+        //public class SetupLogging
+        //{
+        //    [ModuleInitializer]
+        //    public static void Init()
+        //    {
+        //        Initialize();
+        //    }
+        //    public static void Initialize()
+        //    {
 
-                Log.Logger = new LoggerConfiguration()
-                    .MinimumLevel.Verbose()
-                    .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogFiles", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}", "Log.txt"),
-                        rollingInterval: RollingInterval.Infinite,
-                        outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message}{NewLine}{Exception}")
-                    .CreateLogger();
-            }
-        }
+        //        Log.Logger = new LoggerConfiguration()
+        //            .MinimumLevel.Verbose()
+        //            .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogFiles", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}", "Log.txt"),
+        //                rollingInterval: RollingInterval.Infinite,
+        //                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message}{NewLine}{Exception}")
+        //            .CreateLogger();
+        //    }
+        //}
     }
 }

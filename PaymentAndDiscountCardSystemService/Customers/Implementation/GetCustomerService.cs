@@ -34,10 +34,18 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
 
         public Customer GetByName(string name)
         {
-            
-            
             var customer = _customerRepository.GetByName(name);
-            return customer;
+
+            if (customer != null)
+            {
+                _logger.LogInformation($"Customer found with name: {name}");
+                return customer;
+            }
+            else
+            {
+                _logger.LogError($"Customer not found with name: {name}");
+                return customer;
+            }
         }
 
         public Task<Customer?> GetByNameAsync(string name)

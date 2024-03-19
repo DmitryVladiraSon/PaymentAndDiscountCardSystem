@@ -10,6 +10,6 @@ namespace PaymentAndDiscountCardSystemService.Cards.Interfaces
 {
     public interface IAddCardService
     {
-        bool ToCustomer(Customer customer, DiscountCardType cardType);
+        void ToCustomer(Customer customer, DiscountCardType cardType);
     }
 }

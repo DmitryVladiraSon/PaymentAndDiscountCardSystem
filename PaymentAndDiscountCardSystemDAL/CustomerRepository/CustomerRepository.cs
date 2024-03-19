@@ -44,13 +44,15 @@ public async Task<Customer> Get(Guid id)
 
         public Customer GetByName(string name)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException("Value cannot be null or empty.", nameof(name));
-            }
+            //    if (string.IsNullOrEmpty(name))
+            //    {
+            //        throw new ArgumentException("Value cannot be null or empty.", nameof(name));
+            //    }
 
-            var customer = _entities.Find(c => c.Name == name);
-            return customer ?? throw new Exception($"Customer with name '{name}' not found.");
+            //    var customer = _entities.Find(c => c.Name == name);
+            //    return customer ?? throw new Exception($"Customer with name '{name}' not found.");
+
+            return _entities.Find(c => c.Name == name);
         }
 
         public IEnumerator<Customer> GetEnumerator()
