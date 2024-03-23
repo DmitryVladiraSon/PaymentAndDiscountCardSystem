@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Implementation;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
@@ -21,18 +23,18 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
             _logger = logger;
         }
 
-        public Card ByCardType(DiscountCardType type)
+        public DiscountCard ByCardType(DiscountCardType type)
         {
             switch (type)
             {
                 case DiscountCardType.Tube:
-                    return new DiscountCard(DiscountCardType.Tube);
+                    return new AmountDiscountCard(DiscountCardType.Tube);
 
                 case DiscountCardType.Transistor:
-                    return new DiscountCard(DiscountCardType.Transistor );
+                    return new AmountDiscountCard(DiscountCardType.Transistor );
 
                 case DiscountCardType.Integrated:
-                    return new DiscountCard(DiscountCardType.Integrated);
+                    return new AmountDiscountCard(DiscountCardType.Integrated);
 
                 case DiscountCardType.Quantum:
                     return new QuantumCard();
@@ -45,7 +47,7 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
             };
         }
         
-        public Card ByCustomer(Customer customer)
+        public DiscountCard ByCustomer(Customer customer)
         {
             throw new NotImplementedException();
         }

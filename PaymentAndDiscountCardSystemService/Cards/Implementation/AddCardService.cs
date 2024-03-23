@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Implementation;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Implementation;
@@ -36,7 +38,7 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
                     }
                     else
                     {
-                        customer.Cards.Add(new DiscountCard(DiscountCardType.Tube));
+                        customer.Cards.Add(new AmountDiscountCard(DiscountCardType.Tube));
                         break;
                     }
 
@@ -48,7 +50,7 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
                     }
                     else
                     {
-                        customer.Cards.Add(new DiscountCard(DiscountCardType.Transistor));
+                        customer.Cards.Add(new AmountDiscountCard(DiscountCardType.Transistor));
                         break;
                     }
 
@@ -59,7 +61,7 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
                     }
                     else
                     {
-                        customer.Cards.Add(new DiscountCard(DiscountCardType.Integrated));
+                        customer.Cards.Add(new AmountDiscountCard(DiscountCardType.Integrated));
                         break;
                     }
 
@@ -70,7 +72,7 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
                     }
                     else
                     {
-                        customer.Cards.Add(new DiscountCard(DiscountCardType.Quantum));
+                        customer.Cards.Add(new QuantumCard());
                         break;
                     }
 
@@ -81,7 +83,7 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
                     }
                     else
                     {
-                        customer.Cards.Add(new DiscountCard(DiscountCardType.FunnyCard));
+                        customer.Cards.Add(new FunnyCard());
                         break;
                     }
                 default:
@@ -91,7 +93,7 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
 
         public bool HasDuplicateCard(Customer customer, DiscountCardType checkedCardType)
         {
-            foreach (Card card in customer.Cards)
+            foreach (DiscountCard card in customer.Cards)
             {
                 if (card.Type == checkedCardType)
                 {

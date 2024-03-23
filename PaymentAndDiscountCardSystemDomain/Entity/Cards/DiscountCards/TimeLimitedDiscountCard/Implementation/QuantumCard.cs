@@ -1,7 +1,9 @@
-﻿
-namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
+﻿using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Interfaces;
+
+namespace PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Implementation
 {
-    public class QuantumCard : Card
+    public class QuantumCard : DiscountCard, ITimeLimitedCard
     {
         public const int VALIDITY_PERIOD = 180;
         private DateTime creationDate;

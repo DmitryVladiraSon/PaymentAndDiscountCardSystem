@@ -3,7 +3,7 @@ using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 
 namespace PaymentAndDiscountCardSystemDAL.DiscountCardRepository
 {
-    public interface IDiscountCardRepository : IBaseRepository<Card>
+    public interface IDiscountCardRepository : IBaseRepository<DiscountCard>
     {
     }
 }

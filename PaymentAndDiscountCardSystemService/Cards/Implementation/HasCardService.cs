@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PaymentAndDiscountCardSystemService.Cards.Implementation
 {
-    internal class HasCardService : IHasCardService
+    public class HasCardService : IHasCardService
     {
         private readonly ILogger<HasCardService> _logger;
 

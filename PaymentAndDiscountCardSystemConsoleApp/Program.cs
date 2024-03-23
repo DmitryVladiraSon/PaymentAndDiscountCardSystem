@@ -78,12 +78,12 @@ namespace PaymentAndDiscountCardSystem
                                     IssueOrPickUpCardFromCustomer(customer, DiscountCardType.Quantum, hasCardService, deleteCardService, addCardService);
                                     break;
                                 case "4": //User information
-                                    Console.WriteLine($"{customer.Name}");
-                                    Console.WriteLine($"{customer.AccumulatedAmount}");
-                                    Console.WriteLine($"Cards:");
-                                    foreach (Card card in customer.Cards)
+                                    Console.WriteLine($"Name: {customer.Name}");
+                                    Console.WriteLine($"AccumulatedAmount: {customer.AccumulatedAmount}");
+                                    Console.WriteLine($"You Cards:");
+                                    foreach (DiscountCard card in customer.Cards)
                                     {
-                                        Console.WriteLine($"{card.Type} {card.DiscountRate}");
+                                        Console.WriteLine($"{card.Type} - {card.DiscountRate}%");
                                     }
                                     break;
                                 case "5": //Go to autorization
@@ -95,14 +95,14 @@ namespace PaymentAndDiscountCardSystem
                         }
                         else
                         {
-                            Console.WriteLine("Клавиша Escape нажата. Return to Authorization");
+                            Console.WriteLine("Backspace. Return to Authorization");
                             break;
                         }
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Клавиша Escape нажата. Программа завершает работу.");
+                    Console.WriteLine("Escape. The program is shutting down.");
                     break;
                 }
             }
@@ -148,11 +148,11 @@ namespace PaymentAndDiscountCardSystem
             decimal amount;
             
             Console.Write("Enter the amount: ");
-            // Считываем ввод пользователя и пытаемся преобразовать его в десятичное число
+
             if (decimal.TryParse(Console.ReadLine(), out amount) && amount > 0)
             {
                 purchaseService.Purchase(CustomerId, amount);
-                Console.Write("Description about customer and operation");
+                Console.WriteLine("Description about customer and operation");
             }
             else
             {

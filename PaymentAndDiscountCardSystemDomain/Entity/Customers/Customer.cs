@@ -6,9 +6,9 @@ namespace PaymentAndDiscountCardSystemDomain.Entity.Customers
     public class Customer
     {
         
-        private List<Card> _cards;
+        private List<DiscountCard> _cards;
         
-        public List<Card> Cards
+        public List<DiscountCard> Cards
         {
             get { return _cards; }
             //set { _cards = value; }
@@ -21,7 +21,7 @@ namespace PaymentAndDiscountCardSystemDomain.Entity.Customers
         {
             Id = Guid.NewGuid();
             Name = name;
-            _cards = new List<Card>();
+            _cards = new List<DiscountCard>();
         }
     }
 }

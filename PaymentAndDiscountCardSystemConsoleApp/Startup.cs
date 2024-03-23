@@ -31,7 +31,7 @@ namespace PaymentAndDiscountCardSystem
             serviceCollection.AddSingleton<ICreateCustomerService, CreateCustomerService>();
             serviceCollection.AddSingleton<IGetCustomerService, GetCustomerService>();
             serviceCollection.AddSingleton<IAddCardService, AddCardService>();
-            serviceCollection.AddSingleton<IHasCardService, IHasCardService>();
+            serviceCollection.AddSingleton<IHasCardService, HasCardService>();
             serviceCollection.AddSingleton<IDeleteCardService, DeleteCardService>();
             serviceCollection.AddSingleton<IPurchaseService, PurchaseService>();
             serviceCollection.AddSingleton<DataInitializer>();

@@ -10,7 +10,7 @@ namespace PaymentAndDiscountCardSystemService.Cards.Interfaces
 {
     internal interface IGetCardService
     {
-        Card ByCardType(DiscountCardType type);
-        Card ByCustomer(Customer customer);
+        DiscountCard ByCardType(DiscountCardType type);
+        DiscountCard ByCustomer(Customer customer);
     }
 }

@@ -1,8 +1,8 @@
-﻿
-
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 using PaymentAndDiscountCardSystemDAL.DiscountCardRepository;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Interfaces;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
@@ -34,15 +34,18 @@ namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
 
             //Get discount
             int discount = 0;
-
-            var timeLimitedCard = customer.Cards.Where(c => c.GetType() == typeof(QuantumCard))
-                                                .Select(x => (QuantumCard)x).ToList()
-                                                .Where(x=> x.IsExpired() == true)
+            DiscountCardType? usedCardType = null;
+            var timeLimitedCard = customer.Cards.OfType<ITimeLimitedCard>()
+                                                .OrderBy(card => card.IsExpired())
+                                                .Select(x => (DiscountCard)x)
+                                                .OrderByDescending(card => card.DiscountRate)
+                                                .ToList()
                                                 .FirstOrDefault();
 
             if (timeLimitedCard != null)
             {
                 discount = timeLimitedCard.DiscountRate;
+                usedCardType = timeLimitedCard.Type;
             }
             else
             {
@@ -51,20 +54,23 @@ namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
                 if (priorityCard != null)
                 {
                     discount = priorityCard.DiscountRate;
+                    usedCardType = priorityCard.Type;
+
                 }
             }
             
             var amountWithDiscount = amount - (amount / 100 * discount);
             customer.AccumulatedAmount += amount;
+            
+            _logger.LogInformation($"amount: {amount} with discount {discount}% = {amountWithDiscount} | Accumulated amount: {customer.AccumulatedAmount} | used card: {usedCardType}");
 
-            _logger.LogInformation($"amount {amount} with discount {discount}% = {amountWithDiscount} | Accumulated amount {customer.AccumulatedAmount}");
         }
 
         private void AddingDiscountCardsToCustomer(Customer customer)
         {
             foreach (var discountCard in _discountCardRepository.Entities
-                                            .Where(c => c.GetType() == typeof(DiscountCard))
-                                            .Select(x => (DiscountCard)x).ToList())
+                                            .Where(c => c.GetType() == typeof(AmountDiscountCard))
+                                            .Select(x => (AmountDiscountCard)x).ToList())
             {
                 if (discountCard.ThresholdAmount <= customer.AccumulatedAmount)
                 {

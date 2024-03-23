@@ -1,49 +1,51 @@
 ﻿using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Implementation;
 using System.Collections;
 
 namespace PaymentAndDiscountCardSystemDAL.DiscountCardRepository
 {
     public class DiscountCardRepository : IDiscountCardRepository
     {
-        public List<Card> Entities {get;set;}
+        public List<DiscountCard> Entities {get;set;}
         public DiscountCardRepository()
         {
-            Entities = new List<Card>
+            Entities = new List<DiscountCard>
             {
-                new DiscountCard(DiscountCardType.Tube),
-                new DiscountCard(DiscountCardType.Transistor),
-                new DiscountCard(DiscountCardType.Integrated),
+                new AmountDiscountCard(DiscountCardType.Tube),
+                new AmountDiscountCard(DiscountCardType.Transistor),
+                new AmountDiscountCard(DiscountCardType.Integrated),
                 new FunnyCard(),
                 new QuantumCard()
             };
         }
         
-        public void Create(Card entity)
+        public void Create(DiscountCard entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Card entity)
+        public void Delete(DiscountCard entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Card> Get(Guid id)
+        public Task<DiscountCard> Get(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerator<Card> GetEnumerator()
+        public IEnumerator<DiscountCard> GetEnumerator()
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Card>> Select()
+        public Task<List<DiscountCard>> Select()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Card> Update(Card entity)
+        public Task<DiscountCard> Update(DiscountCard entity)
         {
             throw new NotImplementedException();
         }
