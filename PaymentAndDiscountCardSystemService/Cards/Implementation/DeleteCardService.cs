@@ -2,11 +2,6 @@
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PaymentAndDiscountCardSystemService.Cards.Implementation
 {
@@ -19,10 +14,10 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
         }
         public void FromCustomer(Customer customer, DiscountCardType cardType)
         {
-            var cardToRemove = customer.Cards.Find(card => card.Type == cardType);
+            var cardToRemove = customer.DiscountCards.Find(card => card.Type == cardType);
             if (cardToRemove != null)
             {
-                customer.Cards.Remove(cardToRemove);
+                customer.DiscountCards.Remove(cardToRemove);
                 _logger.LogInformation($"the card {cardType} has been deleted form customer {customer.Name} | {customer.Id}");
             }
             else

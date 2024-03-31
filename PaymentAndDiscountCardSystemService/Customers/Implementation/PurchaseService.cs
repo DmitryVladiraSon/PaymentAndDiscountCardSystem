@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
-using PaymentAndDiscountCardSystemDAL.DiscountCardRepository;
+using PaymentAndDiscountCardSystemDAL.Repositories.DiscountCardRepository;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Interfaces;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
+using PaymentAndDiscountCardSystemDomain.Enum;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 
@@ -11,31 +12,34 @@ namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
 {
     public class PurchaseService : IPurchaseService
     {
-        private readonly IGetCustomerService _getCustomerService;
+        private readonly ICustomerQueryService _customerProviderService;
         private readonly IDiscountCardRepository _discountCardRepository;
         private readonly IAddCardService _addCardService;
         private readonly ILogger<PurchaseService> _logger;
         public PurchaseService(
-            IGetCustomerService getCustomerService,
+            ICustomerQueryService getCustomerService,
             IAddCardService addCardService,
             IDiscountCardRepository discountCardRepository,
             ILogger<PurchaseService> logger)
         {
             _discountCardRepository = discountCardRepository;
-            _getCustomerService = getCustomerService;
+            _customerProviderService = getCustomerService;
             _addCardService = addCardService;
             _logger = logger;
         }
-        public void Purchase(Guid customerId, decimal amount)
+        public async void Purchase(Guid customerId, decimal amount)
         {
-            var customer = _getCustomerService.GetById(customerId);
+            var response = await _customerProviderService.GetById(customerId);
+            if(response.StatusCode == StatusCode.UserNotFound)
+            {
 
+            }
+            var customer = response.Data;
             AddingDiscountCardsToCustomer(customer);
 
-            //Get discount
             int discount = 0;
             DiscountCardType? usedCardType = null;
-            var timeLimitedCard = customer.Cards.OfType<ITimeLimitedCard>()
+            var timeLimitedCard = customer.DiscountCards.OfType<ITimeLimitedCard>()
                                                 .OrderBy(card => card.IsExpired())
                                                 .Select(x => (DiscountCard)x)
                                                 .OrderByDescending(card => card.DiscountRate)
@@ -49,7 +53,7 @@ namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
             }
             else
             {
-                var priorityCard = customer.Cards.OrderByDescending(card => card.DiscountRate).FirstOrDefault();
+                var priorityCard = customer.DiscountCards.OrderByDescending(card => card.DiscountRate).FirstOrDefault();
 
                 if (priorityCard != null)
                 {
@@ -74,7 +78,7 @@ namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
             {
                 if (discountCard.ThresholdAmount <= customer.AccumulatedAmount)
                 {
-                    _addCardService.ToCustomer(customer, discountCard.Type);
+                    _addCardService.ToCustomer(customer.Id, discountCard.Type);
                 }
             }
         }

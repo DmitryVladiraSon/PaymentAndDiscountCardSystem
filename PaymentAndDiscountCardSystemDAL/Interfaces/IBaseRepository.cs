@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace PaymentAndDiscountCardSystem.DAL.Interfaces
 {
-    public interface IBaseRepository<T> : IEnumerable<T>
+    public interface IBaseRepository<T, TModelView>
     {
         List<T> Entities { get; }
 
-        void Create(T entity);
+        Task<Guid> Create(TModelView entityModelView);
 
         Task<T> Get(Guid id);
 
-        Task<List<T>> Select();
+        Task<List<T>> GetAll();
 
-        void Delete(T entity);
+        Task<bool> Delete(T entity);
 
+        Task<T> Update(Guid entityId, TModelView entityModelView);
         Task<T> Update(T entity);
 
     }

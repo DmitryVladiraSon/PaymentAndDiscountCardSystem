@@ -1,0 +1,6 @@
+@PaymentAndDiscountCardSystemWebAPI_HostAddress = http://localhost:5290
+
+GET {{PaymentAndDiscountCardSystemWebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

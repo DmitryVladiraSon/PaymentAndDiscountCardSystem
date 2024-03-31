@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PaymentAndDiscountCardSystemDomain.Enum;
 
 namespace PaymentAndDiscountCardSystem.Domain.Response
 {
-    internal class BaseResponse
+    public class BaseResponse<T> : IBaseResponse<T>
     {
+        public string Description { get; set; }
+
+        public StatusCode StatusCode { get; set; }
+
+        public T Data { get; set; }
     }
-    internal interface IBaseResponse
+
+    public interface IBaseResponse<T>
     {
-        //Чуть потом
+        string Description { get; set; }
+
+        StatusCode StatusCode { get; }
+        public T Data { get; }
     }
 }

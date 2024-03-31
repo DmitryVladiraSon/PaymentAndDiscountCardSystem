@@ -5,6 +5,8 @@ namespace PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimi
 {
     public class FunnyCard : DiscountCard, ITimeLimitedCard
     {
+        private DateTime[] _discountsDaysPerMonth;
+
         public FunnyCard()
         {
             int numberOfDiscountDaysPerMonth = 10;
@@ -23,7 +25,15 @@ namespace PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimi
             Type = DiscountCardType.FunnyCard;
         }
 
-        public DateTime[] DiscountsDaysPerMonth { get; set; }
+        public DateTime[] DiscountsDaysPerMonth
+        {
+            get => _discountsDaysPerMonth;
+            set
+            {
+                _discountsDaysPerMonth = value.Select(d => d.ToUniversalTime()).ToArray();
+            }
+        }
+
 
         public bool IsExpired()
         {

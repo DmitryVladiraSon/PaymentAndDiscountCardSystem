@@ -1,99 +1,101 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+using PaymentAndDiscountCardSystem.Domain.Response;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Implementation;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
+using PaymentAndDiscountCardSystemDomain.Enum;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
-using PaymentAndDiscountCardSystemService.Customers.Implementation;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace PaymentAndDiscountCardSystemService.Cards.Implementation
 {
     public class AddCardService : IAddCardService
     {
-        private readonly IGetCustomerService _getCustomerService;
+        private readonly ICustomerQueryService _customerQueryService;
+        private readonly ICustomerCreationService _customerCreationService;
         private readonly ILogger<AddCardService> _logger;
 
-        public AddCardService(IGetCustomerService getCustomerService, ILogger<AddCardService> logger)
+        public AddCardService(ICustomerQueryService customerQueryService,
+            ICustomerCreationService customerCreationService,
+            ILogger<AddCardService> logger)
         {
-            _getCustomerService = getCustomerService;
+            _customerQueryService = customerQueryService;
+            _customerCreationService = customerCreationService;
             _logger = logger;
         }
 
-        public void ToCustomer(Customer customer, DiscountCardType cardType)
+        public async Task<IBaseResponse<Customer>> ToCustomer(Guid customerId, DiscountCardType addedDiscountCardType)
         {
-            switch (cardType)
+            var response = await _customerQueryService.GetById(customerId);
+            if(response.StatusCode == StatusCode.BadRequest)
             {
-                case DiscountCardType.Tube:
+                return response;
+            }
 
-                    if (HasDuplicateCard(customer, cardType))
+            var customer = response.Data;
+            var log = string.Empty;
+            
+            bool isAddedCard = false;
+            foreach(DiscountCardType typeDiscountCard in Enum.GetValues(typeof(DiscountCardType)))
+            {
+                if(typeDiscountCard == addedDiscountCardType && !HasDuplicateCard(customer, addedDiscountCardType))
+                {
+                    switch (addedDiscountCardType)
                     {
-                        break;
-                    }
-                    else
-                    {
-                        customer.Cards.Add(new AmountDiscountCard(DiscountCardType.Tube));
-                        break;
+                        case DiscountCardType.Tube:
+                            customer.DiscountCards.Add(new AmountDiscountCard(DiscountCardType.Tube));
+                            log = $"A discount card {addedDiscountCardType} has been added to the customer {customerId}";
+                            _logger.LogInformation(log);
+                            break;
+
+                        case DiscountCardType.Transistor:
+                            customer.DiscountCards.Add(new AmountDiscountCard(DiscountCardType.Transistor));
+                            log = $"A discount card {addedDiscountCardType} has been added to the customer {customerId}";
+                            _logger.LogInformation(log);
+                            break;
+
+                        case DiscountCardType.Integrated:
+                            customer.DiscountCards.Add(new AmountDiscountCard(DiscountCardType.Integrated));
+                            log = $"A discount card {addedDiscountCardType} has been added to the customer {customerId}";
+                            _logger.LogInformation(log);
+                            break;
+
+                        case DiscountCardType.Quantum:
+                            customer.DiscountCards.Add(new QuantumCard());
+                            log = $"A discount card {addedDiscountCardType} has been added to the customer {customerId}";
+                            _logger.LogInformation(log);
+                            break;
+
+                        case DiscountCardType.FunnyCard:
+                            customer.DiscountCards.Add(new FunnyCard());
+                            log = $"A discount card {addedDiscountCardType} has been added to the customer {customerId}";
+                            _logger.LogInformation(log);
+                            break;
+                        default:
+                            log = $"this type of card '{addedDiscountCardType}' does not exist";
+                            _logger.LogError(log);
+                            break;
                     }
 
-                case DiscountCardType.Transistor:
-                    //Check duplicate 
-                    if (HasDuplicateCard(customer, cardType))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        customer.Cards.Add(new AmountDiscountCard(DiscountCardType.Transistor));
-                        break;
-                    }
-
-                case DiscountCardType.Integrated:
-                    if (HasDuplicateCard(customer, cardType))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        customer.Cards.Add(new AmountDiscountCard(DiscountCardType.Integrated));
-                        break;
-                    }
-
-                case DiscountCardType.Quantum:
-                    if (HasDuplicateCard(customer, cardType))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        customer.Cards.Add(new QuantumCard());
-                        break;
-                    }
-
-                case DiscountCardType.FunnyCard:
-                    if (HasDuplicateCard(customer, cardType))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        customer.Cards.Add(new FunnyCard());
-                        break;
-                    }
-                default:
                     break;
-            };
+                }
+                else
+                {
+                    log = $"Customer '{customerId}' already has a Discount card '{addedDiscountCardType}'";
+                    _logger.LogError(log);
+                }
+            }
+            response.Description = log;
+            await _customerCreationService.Update(customer);
+
+            return response;
         }
 
         public bool HasDuplicateCard(Customer customer, DiscountCardType checkedCardType)
         {
-            foreach (DiscountCard card in customer.Cards)
+            foreach (DiscountCard card in customer.DiscountCards)
             {
                 if (card.Type == checkedCardType)
                 {

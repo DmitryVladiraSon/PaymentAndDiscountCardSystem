@@ -6,11 +6,9 @@ namespace PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimi
     public class QuantumCard : DiscountCard, ITimeLimitedCard
     {
         public const int VALIDITY_PERIOD = 180;
-        private DateTime creationDate;
         public QuantumCard()
         {
             DiscountRate = 20;
-            creationDate = DateTime.Now;
             Type = DiscountCardType.Quantum;
         }
 
@@ -18,7 +16,7 @@ namespace PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimi
         {
             DateTime currentDate = DateTime.Now;
 
-            DateTime expirationDate = creationDate.AddDays(VALIDITY_PERIOD);
+            DateTime expirationDate = CreationDate.AddDays(VALIDITY_PERIOD);
 
             return currentDate >= expirationDate;
         }
@@ -27,7 +25,7 @@ namespace PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimi
         {
             DateTime currentDate = DateTime.Now;
 
-            DateTime expirationDate = creationDate.AddDays(VALIDITY_PERIOD);
+            DateTime expirationDate = CreationDate.AddDays(VALIDITY_PERIOD);
 
             TimeSpan difference = expirationDate - currentDate;
             return (int)difference.TotalDays;

@@ -1,17 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PaymentAndDiscountCardSystem.Service.Customers.Implementation;
-using PaymentAndDiscountCardSystemDAL.CustomerRepository;
-using PaymentAndDiscountCardSystemDAL.DiscountCardRepository;
+using PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository;
+using PaymentAndDiscountCardSystemDAL.Repositories.DiscountCardRepository;
 using PaymentAndDiscountCardSystemService.Cards.Implementation;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Implementation;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PaymentAndDiscountCardSystem
 {
@@ -28,8 +23,8 @@ namespace PaymentAndDiscountCardSystem
                 return new CustomerRepository();
             });
             serviceCollection.AddSingleton<IDiscountCardRepository, DiscountCardRepository>();
-            serviceCollection.AddSingleton<ICreateCustomerService, CreateCustomerService>();
-            serviceCollection.AddSingleton<IGetCustomerService, GetCustomerService>();
+            serviceCollection.AddSingleton<ICustomerCreationService, CustomerCreationService>();
+            serviceCollection.AddSingleton<ICustomerQueryService, CustomerQueryService>();
             serviceCollection.AddSingleton<IAddCardService, AddCardService>();
             serviceCollection.AddSingleton<IHasCardService, HasCardService>();
             serviceCollection.AddSingleton<IDeleteCardService, DeleteCardService>();

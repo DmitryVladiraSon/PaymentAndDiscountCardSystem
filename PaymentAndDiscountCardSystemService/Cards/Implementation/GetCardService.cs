@@ -5,17 +5,12 @@ using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedD
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PaymentAndDiscountCardSystemService.Cards.Implementation
 {
     internal class GetCardService : IGetCardService
     {
-        private readonly IGetCustomerService _getCustomerService;
+        private readonly ICustomerQueryService _getCustomerService;
         private readonly ILogger _logger;
 
         public GetCardService(ILogger logger)

@@ -1,13 +1,14 @@
-﻿using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+﻿using PaymentAndDiscountCardSystem.DAL.Interfaces;
+using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Implementation;
 using System.Collections;
 
-namespace PaymentAndDiscountCardSystemDAL.DiscountCardRepository
+namespace PaymentAndDiscountCardSystemDAL.Repositories.DiscountCardRepository
 {
     public class DiscountCardRepository : IDiscountCardRepository
     {
-        public List<DiscountCard> Entities {get;set;}
+        public List<DiscountCard> Entities { get; set; }
         public DiscountCardRepository()
         {
             Entities = new List<DiscountCard>
@@ -19,13 +20,13 @@ namespace PaymentAndDiscountCardSystemDAL.DiscountCardRepository
                 new QuantumCard()
             };
         }
-        
-        public void Create(DiscountCard entity)
+
+        public async Task<bool> Create(DiscountCard entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(DiscountCard entity)
+        public async Task<bool> Delete(DiscountCard entity)
         {
             throw new NotImplementedException();
         }
@@ -35,22 +36,21 @@ namespace PaymentAndDiscountCardSystemDAL.DiscountCardRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerator<DiscountCard> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<DiscountCard>> Select()
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<DiscountCard> Update(DiscountCard entity)
         {
             throw new NotImplementedException();
         }
+        public Task<List<DiscountCard>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        Task<Guid> IBaseRepository<DiscountCard, DiscountCard>.Create(DiscountCard entityModelView)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<DiscountCard> Update(Guid entityId, DiscountCard entityModelView)
         {
             throw new NotImplementedException();
         }
