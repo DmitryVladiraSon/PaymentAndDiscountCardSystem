@@ -1,5 +1,4 @@
 ﻿using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
-using System.ComponentModel.Design;
 
 namespace PaymentAndDiscountCardSystemDomain.Entity.Customers
 {

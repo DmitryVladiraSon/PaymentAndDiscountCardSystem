@@ -1,5 +1,4 @@
-﻿using PaymentAndDiscountCardSystem.DAL.Interfaces;
-using PaymentAndDiscountCardSystemDomain.Entity.Customers;
+﻿using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 
 namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
 {

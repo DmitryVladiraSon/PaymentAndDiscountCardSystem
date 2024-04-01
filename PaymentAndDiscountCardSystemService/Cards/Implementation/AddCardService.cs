@@ -40,7 +40,7 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
             bool isAddedCard = false;
             foreach(DiscountCardType typeDiscountCard in Enum.GetValues(typeof(DiscountCardType)))
             {
-                if(typeDiscountCard == addedDiscountCardType && !HasDuplicateCard(customer, addedDiscountCardType))
+                if(typeDiscountCard == addedDiscountCardType && !HasCustomerDuplicateCard(customer, addedDiscountCardType))
                 {
                     switch (addedDiscountCardType)
                     {
@@ -93,7 +93,7 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
             return response;
         }
 
-        public bool HasDuplicateCard(Customer customer, DiscountCardType checkedCardType)
+        public bool HasCustomerDuplicateCard(Customer customer, DiscountCardType checkedCardType)
         {
             foreach (DiscountCard card in customer.DiscountCards)
             {

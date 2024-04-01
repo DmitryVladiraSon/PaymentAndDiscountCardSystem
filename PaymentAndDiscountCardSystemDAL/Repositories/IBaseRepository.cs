@@ -1,5 +1,4 @@
-﻿
-namespace PaymentAndDiscountCardSystem.DAL.Interfaces
+﻿namespace PaymentAndDiscountCardSystemDAL.Repositories
 {
     public interface IBaseRepository<T, TModelView>
     {
@@ -11,7 +10,7 @@ namespace PaymentAndDiscountCardSystem.DAL.Interfaces
 
         Task<List<T>> GetAll();
 
-        Task<bool> Delete(T entity);
+        Task<bool> Delete(Guid entityId);
 
         Task<T> Update(Guid entityId, TModelView entityModelView);
         Task<T> Update(T entity);

@@ -23,13 +23,13 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
             _logger = logger;
         }
 
-        public async Task<IBaseResponse<Customer>> Create(CustomerViewModel customerViewModel)
+        public async Task<IBaseResponse<Guid>> Create(CustomerViewModel customerViewModel)
         {
-            var response = new BaseResponse<Customer>();
+            var response = new BaseResponse<Guid>();
             var log = string.Empty;
 
-            var cust = await _customerQueryService.GetByName(customerViewModel.Name);
-            if(cust.Data != null)
+            var customer = await _customerQueryService.GetByName(customerViewModel.Name);
+            if(customer.Data != null)
             {
                 log = $"User creation failed. Username '{customerViewModel.Name}' is already taken.";
                 _logger.LogError(log);
@@ -55,8 +55,8 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
 
                 response.StatusCode = StatusCode.BadRequest;
             }
-            var getCustomerResponse = await _customerQueryService.GetById(customerId);
-            response.Data = getCustomerResponse.Data;
+
+            response.Data = customerId;
             response.Description = log;
 
             return response;
@@ -75,7 +75,7 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
             var customer = await _customerRepository.Get(customerId);
             var response = new BaseResponse<bool>()
             { 
-                Data = await _customerRepository.Delete(customer),
+                Data = await _customerRepository.Delete(customerId),
             };
             return response; 
 }

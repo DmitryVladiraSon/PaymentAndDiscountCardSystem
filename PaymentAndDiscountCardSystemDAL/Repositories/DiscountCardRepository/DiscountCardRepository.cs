@@ -1,8 +1,6 @@
-﻿using PaymentAndDiscountCardSystem.DAL.Interfaces;
-using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+﻿using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Implementation;
-using System.Collections;
 
 namespace PaymentAndDiscountCardSystemDAL.Repositories.DiscountCardRepository
 {
@@ -51,6 +49,11 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.DiscountCardRepository
         }
 
         public Task<DiscountCard> Update(Guid entityId, DiscountCard entityModelView)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> Delete(Guid entityId)
         {
             throw new NotImplementedException();
         }

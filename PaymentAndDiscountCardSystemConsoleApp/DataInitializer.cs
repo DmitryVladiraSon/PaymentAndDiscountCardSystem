@@ -19,9 +19,6 @@ namespace PaymentAndDiscountCardSystem
         public void Initialize()
         {
             Customer customer1 = new Customer("Dima");
-            _createCustomerService.Add(customer1);
-            _addCardService.ToCustomer(customer1, DiscountCardType.Tube);
-            _addCardService.ToCustomer(customer1, DiscountCardType.Tube);
         }
     }
 }

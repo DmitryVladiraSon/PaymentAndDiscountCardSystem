@@ -26,7 +26,7 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
             var response = await _customerCreationService.Create(customerViewModel);
             if (response.StatusCode == PaymentAndDiscountCardSystemDomain.Enum.StatusCode.OK)
             {
-                return Ok(response.Data.Id);
+                return Ok(response.Data);
             }
             
             else return BadRequest(response.Description);

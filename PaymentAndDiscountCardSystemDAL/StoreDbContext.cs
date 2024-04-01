@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
-using PaymentAndDiscountCardSystemDAL.Entity;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Implementation;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
+using PaymentAndDiscountCardSystemDomain.Entity.Orders;
+using PaymentAndDiscountCardSystemDomain.Entity.OrdersItems;
+using PaymentAndDiscountCardSystemDomain.Entity.Products;
+using System.Data.Common;
 
 namespace PaymentAndDiscountCardSystemDAL
 {
@@ -15,5 +17,18 @@ namespace PaymentAndDiscountCardSystemDAL
         public DbSet<AmountDiscountCard> AmountDiscountCards { get; set; }
         public DbSet<FunnyCard> FunnyCards{ get; set; }
         public DbSet<QuantumCard> QuantumCards{ get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrdersItems { get; set;}
+        
+
+        public DbSet<Product> Products { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+          // modelBuilder.Entity<OrderItem>().HasNoKey();
+        
+        
+        }
     }
+    
 }

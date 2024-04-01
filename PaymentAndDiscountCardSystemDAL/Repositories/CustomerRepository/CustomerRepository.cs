@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
-using System.Collections;
-using System.Xml.Linq;
 
 namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly StoreDbContext _storeDBContext;
+        private readonly StoreDbContext _DbContext;
 
         public CustomerRepository()
         {
@@ -16,7 +13,7 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
 
         public CustomerRepository(StoreDbContext storeDBContext)
         {
-            _storeDBContext = storeDBContext;
+            _DbContext = storeDBContext;
         }
 
         public List<Customer> Entities => throw new NotImplementedException();
@@ -27,22 +24,23 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
             {
                 throw new ArgumentNullException(nameof(customerViewModel));
             }
-            await _storeDBContext.Customers.AddAsync(new Customer(customerViewModel.Name));
-            await _storeDBContext.SaveChangesAsync();
-            var customer = await _storeDBContext.Customers.FirstAsync(c=>c.Name == customerViewModel.Name);
+            await _DbContext.Customers.AddAsync(new Customer(customerViewModel.Name));
+            await _DbContext.SaveChangesAsync();
+            var customer = await _DbContext.Customers.FirstAsync(c=>c.Name == customerViewModel.Name);
             return customer.Id;
         }
 
-        public async Task<bool> Delete(Customer customer)
+        public async Task<bool> Delete(Guid customerId)
         {
-            _storeDBContext.Customers.Remove(customer);
-            await _storeDBContext.SaveChangesAsync();
+           await _DbContext.Customers
+                .Where(c => c.Id == customerId)
+                .ExecuteDeleteAsync();
             return true;
         }
 
         public async Task<Customer> Get(Guid customerId)
         {
-            var customer = await _storeDBContext.Customers
+            var customer = await _DbContext.Customers
                     .Where(c => c.Id == customerId)
                     .Include(c => c.DiscountCards)
                     .FirstOrDefaultAsync();
@@ -56,7 +54,7 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
 
         public async Task<List<Customer>> GetAll()
         {
-            return await _storeDBContext.Customers
+            return await _DbContext.Customers
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -69,7 +67,7 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
             }
             else
             {
-                return await _storeDBContext.Customers
+                return await _DbContext.Customers
                     .Where(c => c.Name == name)
                     .Include(c => c.DiscountCards)
                     .SingleOrDefaultAsync();
@@ -78,7 +76,7 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
 
         public async Task<List<Customer>> GetWithoutCard()
         {
-            return await _storeDBContext.Customers
+            return await _DbContext.Customers
                 .AsNoTracking()
                 .Where(c => c.DiscountCards.Count == 0)
                 .ToListAsync();
@@ -86,26 +84,26 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
 
         public async Task<Customer> Update(Guid customerId, CustomerViewModel customerViewModel)
         {
-               await _storeDBContext.Customers
+               await _DbContext.Customers
                     .Where(c => c.Id == customerId)
                     .ExecuteUpdateAsync(s => s
                     .SetProperty(c => c.Name, customerViewModel.Name));
 
-               await _storeDBContext.SaveChangesAsync();
-               return await _storeDBContext.Customers.FindAsync(customerId);
+               await _DbContext.SaveChangesAsync();
+               return await _DbContext.Customers.FindAsync(customerId);
         }
 
         public async Task<Customer> Update(Customer customer)
             {
             // Обновление свойств сущности Customer
-            await _storeDBContext.Customers
+            await _DbContext.Customers
                 .Where(c => c.Id == customer.Id)
                 .ExecuteUpdateAsync(s => s
                     .SetProperty(c => c.Name, customer.Name)
                     .SetProperty(c => c.AccumulatedAmount, customer.AccumulatedAmount));
 
             // Обновление коллекции DiscountCards отдельно
-            var existingCustomer = await _storeDBContext.Customers
+            var existingCustomer = await _DbContext.Customers
                 .Include(c => c.DiscountCards)
                 .FirstOrDefaultAsync(c => c.Id == customer.Id);
 
@@ -133,10 +131,10 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
             }
 
             // Сохранение изменений в базе данных
-            await _storeDBContext.SaveChangesAsync();
+            await _DbContext.SaveChangesAsync();
 
             // Возврат обновленной сущности Customer
-            return await _storeDBContext.Customers.FindAsync(customer.Id);
+            return await _DbContext.Customers.FindAsync(customer.Id);
         }
     }
 }

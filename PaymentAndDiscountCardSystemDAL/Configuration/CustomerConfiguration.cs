@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PaymentAndDiscountCardSystemDAL.Entity;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 
 namespace PaymentAndDiscountCardSystemDAL.Configuration

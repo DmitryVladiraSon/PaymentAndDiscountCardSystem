@@ -3,10 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PaymentAndDiscountCardSystemDAL;
 using PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository;
+using PaymentAndDiscountCardSystemDAL.Repositories.ProductRepository;
 using PaymentAndDiscountCardSystemService.Cards.Implementation;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Implementation;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
+using PaymentAndDiscountCardSystemService.Products;
+using PaymentAndDiscountCardSystemWebAPI.Data;
 using System.Text.Json.Serialization;
 
 namespace PaymentAndDiscountCardSystemWebAPI
@@ -37,6 +40,14 @@ namespace PaymentAndDiscountCardSystemWebAPI
             builder.Services.AddScoped<ICustomerQueryService, CustomerQueryService>();
             builder.Services.AddScoped<IAddCardService, AddCardService>();
             builder.Services.AddScoped<IDeleteCardService, DeleteCardService>();
+
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<DataInitializer>();
+
+            //var serviceProvider = builder.Services.BuildServiceProvider();
+            //var dataInitializer = serviceProvider.GetRequiredService<DataInitializer>();
+            //dataInitializer.Initialize();
 
             var app = builder.Build();
 
