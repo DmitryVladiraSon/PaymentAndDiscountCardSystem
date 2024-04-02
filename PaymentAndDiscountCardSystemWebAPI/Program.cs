@@ -3,11 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PaymentAndDiscountCardSystemDAL;
 using PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository;
+using PaymentAndDiscountCardSystemDAL.Repositories.OrderItemRepository;
+using PaymentAndDiscountCardSystemDAL.Repositories.OrderRepository;
 using PaymentAndDiscountCardSystemDAL.Repositories.ProductRepository;
 using PaymentAndDiscountCardSystemService.Cards.Implementation;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Implementation;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
+using PaymentAndDiscountCardSystemService.OrderItems;
+using PaymentAndDiscountCardSystemService.Orders;
 using PaymentAndDiscountCardSystemService.Products;
 using PaymentAndDiscountCardSystemWebAPI.Data;
 using System.Text.Json.Serialization;
@@ -44,6 +48,12 @@ namespace PaymentAndDiscountCardSystemWebAPI
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<DataInitializer>();
+
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IOrderService,OrderService > ();
+
+            builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            builder.Services.AddScoped<IOrderItemService, OrderItemService> ();
 
             //var serviceProvider = builder.Services.BuildServiceProvider();
             //var dataInitializer = serviceProvider.GetRequiredService<DataInitializer>();

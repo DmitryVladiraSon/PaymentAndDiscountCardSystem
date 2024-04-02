@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PaymentAndDiscountCardSystem.Domain.Response;
 using PaymentAndDiscountCardSystemDomain.Entity.Orders;
 
@@ -14,13 +15,22 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.OrderRepository
             _logger = logger;
             _dbContext = dbContext;
         }
-        public async Task<IBaseResponse<Order>> Create(Guid customerId)
+        public async Task<Guid> Create(Guid customerId)
         {
-            var response = new BaseResponse<Order>();
             var order = new Order(customerId);
-           await _dbContext.Orders.AddAsync(order);
+            await _dbContext.Orders.AddAsync(order);
             await _dbContext.SaveChangesAsync();
-            return response;
+
+            return order.OrderId;
+        }
+
+        public async Task<Order> Get(Guid orderId)
+        {
+            var order = await _dbContext.Orders
+                .Where(o => o.OrderId == orderId)
+                .FirstOrDefaultAsync();
+
+            return order;
         }
     }
 }

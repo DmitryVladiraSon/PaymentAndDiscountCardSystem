@@ -6,7 +6,20 @@ namespace PaymentAndDiscountCardSystemDomain.Entity.OrdersItems
 {
     public class OrderItem
     {
-
+        public OrderItem(Order order, Product product, int count)
+        {
+            Id = Guid.NewGuid();
+            Order = order;
+            OrderId = order.OrderId;
+            Product = product;
+            ProductId = product.Id;
+            CountItems = count;
+            CustomerId = order.CustomerId;
+        }
+        public OrderItem()
+        {
+            
+        }
         public Guid Id  { get; set; }
 
         public Guid OrderId  { get; set; }

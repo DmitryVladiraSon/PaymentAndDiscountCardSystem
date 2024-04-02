@@ -7,10 +7,10 @@ namespace PaymentAndDiscountCardSystemDomain.Entity.Orders
     {
         public Order(Guid customerId)
         {
-            OrderID = Guid.NewGuid();
+            OrderId = Guid.NewGuid();
             CustomerId = customerId;
         }
-        public Guid OrderID { get; set; }
+        public Guid OrderId { get; set; }
         public Guid CustomerId { get; set; }
         public Customer? Customer { get; set; }
         public List<OrderItem> orderItems { get; set; }

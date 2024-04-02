@@ -5,6 +5,7 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.OrderRepository
 {
     public interface IOrderRepository 
     {
-        Task<IBaseResponse<Order>> Create(Guid customerID);
+        Task<Guid> Create(Guid customerId);
+        Task<Order> Get(Guid orderId);
     }
 }

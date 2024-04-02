@@ -11,7 +11,7 @@ namespace PaymentAndDiscountCardSystemDAL.Configuration
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.HasKey(o => o.OrderID);
+            builder.HasKey(o => o.OrderId);
 
             }
     }
