@@ -1,7 +1,7 @@
 ﻿
 namespace PaymentAndDiscountCardSystemDomain.Entity.Customers
 {
-    public class CustomerViewModel
+    public class CustomerDTO
     {
         public string Name { get; set; }
     }

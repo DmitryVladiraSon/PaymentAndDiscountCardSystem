@@ -1,5 +1,4 @@
-﻿using PaymentAndDiscountCardSystem.Domain.Response;
-using PaymentAndDiscountCardSystemDAL.Repositories.OrderItemRepository;
+﻿using PaymentAndDiscountCardSystemDAL.Repositories.OrderItemRepository;
 using PaymentAndDiscountCardSystemDomain.Entity.Orders;
 using PaymentAndDiscountCardSystemDomain.Entity.OrdersItems;
 using PaymentAndDiscountCardSystemService.Orders;
@@ -22,34 +21,26 @@ namespace PaymentAndDiscountCardSystemService.OrderItems
             _orderService = orderService;
             _productService = productService;
         }
-        public async Task<IBaseResponse<Order>> AddToOrder(Guid orderId, Guid productId)
+        public async Task<bool> AddToOrder(Guid orderId, Guid productId)
         {
-            var response = new BaseResponse<Order>();
+            var order = await _orderService.Get(orderId);
 
-            var orderResponse = await _orderService.Get(orderId);
-            var order = orderResponse.Data;
+            var product = await _productService.Get(productId);
 
-            var productResponse = await _productService.Get(productId);
-            var product = productResponse.Data;
+            var isAdded = await _orderItemRepository.Create(order, product);
 
-            await _orderItemRepository.Create(order, product);
-
-            return response;
+            return isAdded;
         }
 
-        public async Task<IBaseResponse<OrderItem>> UpdateFromOrder(Guid orderItemId, int countOrderItem)
+        public async Task<OrderItem> UpdateFromOrder(Guid orderItemId, int countOrderItem)
         {
-            var response = new BaseResponse<OrderItem>();
             var orderItem = await _orderItemRepository.Update(orderItemId, countOrderItem);
-            response.Data = orderItem;
-            return response;
+            return orderItem;
         }
-        public async Task<IBaseResponse<Guid>> Delete(Guid orderItemId)
+        public async Task<Guid> Delete(Guid orderItemId)
         {
-            var response = new BaseResponse<Guid>();
-            var idDeletedItem = await _orderItemRepository.Delete(orderItemId);
-            response.Data = idDeletedItem;
-            return response;
+            var guidDeletedOrderItem = await _orderItemRepository.Delete(orderItemId);
+            return guidDeletedOrderItem;
         }
     }
 }

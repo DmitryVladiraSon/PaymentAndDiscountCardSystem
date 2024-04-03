@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using PaymentAndDiscountCardSystem.Domain.Response;
 using PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
-using PaymentAndDiscountCardSystemDomain.Enum;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 
 namespace PaymentAndDiscountCardSystemService.Customers.Implementation
@@ -23,71 +21,47 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
             _logger = logger;
         }
 
-        public async Task<IBaseResponse<Guid>> Create(CustomerViewModel customerViewModel)
+        public async Task<Guid?> Create(CustomerDTO customerViewModel)
         {
-            var response = new BaseResponse<Guid>();
-            var log = string.Empty;
 
-            var customer = await _customerQueryService.GetByName(customerViewModel.Name);
-            if(customer.Data != null)
+            var customerWithEnteringName = await _customerQueryService.GetByName(customerViewModel.Name);
+            if(customerWithEnteringName != null)
             {
-                log = $"User creation failed. Username '{customerViewModel.Name}' is already taken.";
-                _logger.LogError(log);
+                _logger.LogError($"User creation failed. Username '{customerViewModel.Name}' is already taken.");
 
-                response.Description = log;
-                response.StatusCode = StatusCode.BadRequest;
-                return response;
+                return null;
             }
 
             var customerId = await _customerRepository.Create(customerViewModel);
             
             if (customerId != null)
             {
-                log = $"Customer created: {customerViewModel.Name}";
-                _logger.LogInformation(log);
-
-                response.StatusCode = StatusCode.OK;
+                _logger.LogInformation($"Customer created: {customerViewModel.Name}");
             }
             else
             {
-                log = $"Customer DID NOT created: {customerViewModel.Name}";
-                _logger.LogError(log);
-
-                response.StatusCode = StatusCode.BadRequest;
+                _logger.LogError($"Customer DID NOT created: {customerViewModel.Name}");
             }
 
-            response.Data = customerId;
-            response.Description = log;
 
-            return response;
+            return customerId;
         }
-        public async Task<IBaseResponse<Customer>> Update(Guid customerId, CustomerViewModel customerViewModel)
+        public async Task<Customer> Update(Guid customerId, CustomerDTO customerViewModel)
         {
-            var response = new BaseResponse<Customer>();
             var customer = await _customerRepository.Update(customerId, customerViewModel);
             
-            response.Data = customer;
-            return response;
+            return customer;
         }
-        public async Task<IBaseResponse<bool>> Delete(Guid customerId)
+        public async Task<bool> Delete(Guid customerId)
         {
+            var isDeleted = await _customerRepository.Delete(customerId);
+            return isDeleted; 
+        }
 
-            var customer = await _customerRepository.Get(customerId);
-            var response = new BaseResponse<bool>()
-            { 
-                Data = await _customerRepository.Delete(customerId),
-            };
-            return response; 
-}
-
-
-
-        public async Task<IBaseResponse<Customer>> Update(Customer customer)
+        public async Task<Customer> Update(Customer customer)
         {
-            var response = new BaseResponse<Customer>();
-            var customer2 =  await _customerRepository.Update(customer);
-            response.Data = customer2;
-            return response;
+            var updatedCustomer =  await _customerRepository.Update(customer);
+            return updatedCustomer;
         }
     }
 }

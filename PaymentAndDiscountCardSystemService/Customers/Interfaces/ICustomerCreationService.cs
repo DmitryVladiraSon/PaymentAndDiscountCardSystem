@@ -1,13 +1,12 @@
-﻿using PaymentAndDiscountCardSystem.Domain.Response;
-using PaymentAndDiscountCardSystemDomain.Entity.Customers;
+﻿using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 
 namespace PaymentAndDiscountCardSystemService.Customers.Interfaces
 {
     public interface ICustomerCreationService
     {
-        Task<IBaseResponse<Guid>> Create(CustomerViewModel customer);
-        Task<IBaseResponse<Customer>> Update(Guid customerId, CustomerViewModel customer);
-        Task<IBaseResponse<Customer>> Update(Customer customer);
-        Task<IBaseResponse<bool>> Delete(Guid customerId);
+        Task<Guid?> Create(CustomerDTO customer);
+        Task<Customer> Update(Guid customerId, CustomerDTO customer);
+        Task<Customer> Update(Customer customer);
+        Task<bool> Delete(Guid customerId);
     }
 }

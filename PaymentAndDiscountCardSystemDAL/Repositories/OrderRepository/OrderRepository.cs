@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using PaymentAndDiscountCardSystem.Domain.Response;
 using PaymentAndDiscountCardSystemDomain.Entity.Orders;
 
 namespace PaymentAndDiscountCardSystemDAL.Repositories.OrderRepository
@@ -31,6 +30,15 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.OrderRepository
                 .FirstOrDefaultAsync();
 
             return order;
+        }
+
+        public async Task<List<Order>> GetAll()
+        {
+            return await _dbContext.Orders
+                .Include(o => o.Customer)
+                .Include(oi => oi.orderItems)
+                    .ThenInclude(oi => oi.Product)
+                .ToListAsync();
         }
     }
 }

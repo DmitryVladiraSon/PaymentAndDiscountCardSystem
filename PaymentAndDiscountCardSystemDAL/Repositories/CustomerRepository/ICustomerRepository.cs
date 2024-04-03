@@ -2,7 +2,7 @@
 
 namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
 {
-    public interface ICustomerRepository : IBaseRepository<Customer, CustomerViewModel>
+    public interface ICustomerRepository : IBaseRepository<Customer, CustomerDTO>
     {
         Task<Customer> GetByName(string name);
         Task<List<Customer>> GetWithoutCard();

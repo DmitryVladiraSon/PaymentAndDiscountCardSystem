@@ -18,16 +18,24 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
         [Route("Create")]
         public async Task<IActionResult> CreateOrder(Guid customerId)
         {
-            var response = await _orderService.Create(customerId);
-            return Ok(response.Data);
+            var orderId = await _orderService.Create(customerId);
+            return Ok(orderId);
         }
 
         [HttpGet]
         [Route("Get")]
         public async Task<IActionResult> Get(Guid orderId)
         {
-            var response = await _orderService.Get(orderId);
-            return Ok(response.Data);
+            var order = await _orderService.Get(orderId);
+            return Ok(order);
+        }
+        
+        [HttpGet]
+        [Route("GetFromCustomer")]
+        public async Task<IActionResult> GetFromCustomer(Guid customerId)
+        {
+            var orders = await _orderService.GetFromCustomer(customerId);
+            return Ok(orders);
         }
 
         //public IActionResult DeleteOrder()

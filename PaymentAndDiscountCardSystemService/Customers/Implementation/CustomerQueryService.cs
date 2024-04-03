@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using PaymentAndDiscountCardSystem.Domain.Response;
 using PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
-using PaymentAndDiscountCardSystemDomain.Enum;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 
 namespace PaymentAndDiscountCardSystemService.Customers.Implementation
@@ -18,58 +16,32 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
             _customerRepository = customerRepository;
         }
 
-        public async Task<IBaseResponse<Customer>>? GetById(Guid customerId)
+        public async Task<Customer?> GetById(Guid customerId)
         {
-            var response = new BaseResponse<Customer>();
             var customer = await _customerRepository.Get(customerId);
-            response.Data = customer;
-            string log = string.Empty;
             if (customer != null)
             {
-                log = $"Customer found with id: {customerId}";
-                _logger.LogInformation(log);
-
-                response.StatusCode = StatusCode.OK;
-                response.Description = log;
-                
-                return response;
+                _logger.LogInformation($"Customer found with id: {customerId}");
             }
             else
             {
-                log = $"Customer not found with id: {customerId}";
-                _logger.LogError(log);
-
-                response.StatusCode = StatusCode.BadRequest;
-                response.Description = log;
-
-                return response;
+                _logger.LogError($"Customer not found with id: {customerId}");
             }
+            return customer;
         }
 
-        public async Task<IBaseResponse<Customer>>? GetByName(string name)
+        public async Task<Customer?> GetByName(string name)
         {
-            var response = new BaseResponse<Customer> ();
-            var log = string.Empty;
             var customer = await _customerRepository.GetByName(name);
-           
-            response.Data = customer;
-
             if (customer != null)
             {
-                log = $"Customer found with name: {name}";
-                _logger.LogInformation(log);
-
-                response.StatusCode = StatusCode.OK;
+                _logger.LogInformation($"Customer found with name: {name}");
             }
             else
             {
-                log = $"Customer not found with name: {name}";
-                _logger.LogError(log);
-
-                response.StatusCode = StatusCode.BadRequest;
+                _logger.LogError($"Customer not found with name: {name}");
             }
-            return response;
-
+            return customer;
         }
     }
 }

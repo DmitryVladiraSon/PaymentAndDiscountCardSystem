@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using PaymentAndDiscountCardSystem.Domain.Response;
 using PaymentAndDiscountCardSystemDAL.Repositories.ProductRepository;
 using PaymentAndDiscountCardSystemDomain.Entity.Products;
 
@@ -16,49 +15,41 @@ namespace PaymentAndDiscountCardSystemService.Products
             _productRepository = productRepository;
         }
 
-        public async Task<IBaseResponse<Guid>> Create(ProductViewModel productViewModel)
+        public async Task<Guid> Create(ProductDTO productViewModel)
         {
-            var response = new BaseResponse<Guid>();
             var productId = await _productRepository.Create(productViewModel);
-            response.Data = productId;
 
-            return response;
+            return productId;
         }
 
-        public async Task<IBaseResponse<bool>> Delete(Guid productId)
+        public async Task<bool> Delete(Guid productId)
         {
-            var response = new BaseResponse<bool>();
             var result = await _productRepository.Delete(productId);
-            response.Data = result;
 
-            return response;
+            return result;
         }
 
-        public async Task<IBaseResponse<Product>> Update(Guid productId, ProductViewModel product)
+        public async Task<Product> Update(Guid productId, ProductDTO product)
         {
-            var response = new BaseResponse<Product>();
             var newProduct = await _productRepository.Update(productId, product);
-            response.Data = newProduct;
-            return response;
+            return newProduct;
         }
 
-        public Task<IBaseResponse<Product>> Update(Product product)
+        public Task<Product> Update(Product product)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IBaseResponse<List<Product>>> GetAll()
+        public async Task<List<Product>> GetAll()
         {
-            var response = new BaseResponse<List<Product>>();
-            response.Data = await _productRepository.GetAll();
-            return response;
+            var products = await _productRepository.GetAll();
+            return products;
         }
 
-        public async Task<IBaseResponse<Product>> Get(Guid productId)
+        public async Task<Product> Get(Guid productId)
         {
-            var response = new BaseResponse<Product>();
-            response.Data = await _productRepository.Get(productId);
-            return response;
+            var product = await _productRepository.Get(productId);
+            return product;
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
-using PaymentAndDiscountCardSystemDAL.Repositories.DiscountCardRepository;
-using PaymentAndDiscountCardSystemService.Cards.Implementation;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PaymentAndDiscountCardSystemWebAPI.Controllers
 {
@@ -27,8 +23,8 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
         [Route("AddToCustomer")]
         public async Task<IActionResult> AddToCustomer(Guid customerId, DiscountCardType discountCardType)
         {
-            var response = await _addCardService.ToCustomer(customerId,discountCardType);
-            return Ok(response.Description);
+            var customer = await _addCardService.ToCustomer(customerId,discountCardType);
+            return Ok(customer);
         }
         
         [HttpGet("{id}")]

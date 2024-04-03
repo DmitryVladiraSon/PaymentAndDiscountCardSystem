@@ -1,10 +1,10 @@
 ﻿namespace PaymentAndDiscountCardSystemDAL.Repositories
 {
-    public interface IBaseRepository<T, TModelView>
+    public interface IBaseRepository<T, TModelDTO>
     {
         List<T> Entities { get; }
 
-        Task<Guid> Create(TModelView entityModelView);
+        Task<Guid> Create(TModelDTO entityDTO);
 
         Task<T> Get(Guid id);
 
@@ -12,7 +12,7 @@
 
         Task<bool> Delete(Guid entityId);
 
-        Task<T> Update(Guid entityId, TModelView entityModelView);
+        Task<T> Update(Guid entityId, TModelDTO entityDTO);
         Task<T> Update(T entity);
 
     }

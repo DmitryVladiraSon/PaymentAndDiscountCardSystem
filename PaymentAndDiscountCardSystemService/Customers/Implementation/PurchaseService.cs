@@ -4,7 +4,6 @@ using PaymentAndDiscountCardSystemDAL.Repositories.DiscountCardRepository;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Interfaces;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
-using PaymentAndDiscountCardSystemDomain.Enum;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 
@@ -29,12 +28,8 @@ namespace PaymentAndDiscountCardSystem.Service.Customers.Implementation
         }
         public async void Purchase(Guid customerId, decimal amount)
         {
-            var response = await _customerProviderService.GetById(customerId);
-            if(response.StatusCode == StatusCode.UserNotFound)
-            {
+            var customer = await _customerProviderService.GetById(customerId);
 
-            }
-            var customer = response.Data;
             AddingDiscountCardsToCustomer(customer);
 
             int discount = 0;

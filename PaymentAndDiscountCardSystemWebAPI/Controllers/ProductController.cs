@@ -17,44 +17,50 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
             _productService = productService;
             _dataInitializer = dataInitializer;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
 
         [HttpPost]
+
         [Route("Create")]
-        public async Task<IActionResult> Create(ProductViewModel model)
+        public async Task<IActionResult> Create(ProductDTO model)
         {
-            var response =  await _productService.Create(model);
-            return Ok(response.Data);
+            var idNewCustomer =  await _productService.Create(model);
+            return Ok(idNewCustomer);
         }
 
         [HttpPut]
         [Route("Update")]
-        public async Task<IActionResult> Update(Guid productId, ProductViewModel model)
+        public async Task<IActionResult> Update(Guid productId, ProductDTO model)
         {
-            var response =  await _productService.Update(productId,model);
-            return Ok(response.Data);
+            var newProduct =  await _productService.Update(productId,model);
+            return Ok(newProduct);
         }
 
         [HttpGet]
         [Route("Get")]
         public async Task<IActionResult> Get(Guid productId)
         {
-            var response =  await _productService.Get(productId);
-            return Ok(response.Data);
+            var product =  await _productService.Get(productId);
+            return Ok(product);
         }
         [HttpDelete]
         [Route("Delete")]
         public async Task<IActionResult> Update(Guid productId)
         {
-            var response =  await _productService.Delete(productId);
-            return Ok(response.Data);
+            var wasDeleted =  await _productService.Delete(productId);
+            return Ok(wasDeleted);
         }
         
         [HttpGet]
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            var response =  await _productService.GetAll();
-            return Ok(response.Data);
+            var products =  await _productService.GetAll();
+            return Ok(products);
         }      
         
         [HttpGet]

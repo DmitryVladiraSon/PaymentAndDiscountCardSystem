@@ -21,34 +21,36 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public async Task<IActionResult> Create(CustomerViewModel customerViewModel)
+        public async Task<IActionResult> Create(CustomerDTO customerViewModel)
         {
-            var response = await _customerCreationService.Create(customerViewModel);
-            if (response.StatusCode == PaymentAndDiscountCardSystemDomain.Enum.StatusCode.OK)
+            var customerId = await _customerCreationService.Create(customerViewModel);
+            if (customerId != null)
             {
-                return Ok(response.Data);
+                return Ok(customerId);
             }
             
-            else return BadRequest(response.Description);
+            else return BadRequest(customerId);
         }
 
 
 
         [HttpGet]
+        [Route("Get")]
         public async Task<IActionResult> Get(Guid customerId)
         {
-            var response = await _customerQueryService.GetById(customerId);
+            var customer = await _customerQueryService.GetById(customerId);
             
-           if(response == null)
+           if(customer == null)
             {
-                return BadRequest(response.Description);
+                return BadRequest(customer);
             }
 
-            return Ok(response.Data);
+            return Ok(customer);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Guid customerId, CustomerViewModel customerViewModel)
+        [Route("Update")]
+        public async Task<IActionResult> Update(Guid customerId, CustomerDTO customerViewModel)
         {
             await _customerCreationService.Update(customerId, customerViewModel);
             return Ok();

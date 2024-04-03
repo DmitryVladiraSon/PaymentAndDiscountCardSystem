@@ -15,7 +15,7 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.ProductRepository
         }
         public List<Product> Entities => throw new NotImplementedException();
 
-        public async Task<Guid> Create(ProductViewModel entityModelView)
+        public async Task<Guid> Create(ProductDTO entityModelView)
         {
             var product = new Product
                 (
@@ -51,7 +51,7 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.ProductRepository
             return await _dbContext.Products.ToListAsync();
         }
 
-        public async Task<Product> Update(Guid productId, ProductViewModel entityModelView)
+        public async Task<Product> Update(Guid productId, ProductDTO entityModelView)
         {
             await _dbContext.Products
                 .Where(p => p.Id == productId)

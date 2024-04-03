@@ -16,7 +16,7 @@ namespace PaymentAndDiscountCardSystemWebAPI.Data
 
             for (int i = 0; i < countProducts; i++)
             {
-                _productRepository.Create(new ProductViewModel
+                _productRepository.Create(new ProductDTO
                 {
                     Name = $"Product {i + 1}",
                     Description = "Product's description",

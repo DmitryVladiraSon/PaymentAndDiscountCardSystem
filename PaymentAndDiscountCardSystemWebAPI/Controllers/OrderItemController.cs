@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentAndDiscountCardSystemDomain.Entity.OrdersItems;
 using PaymentAndDiscountCardSystemService.OrderItems;
 
 namespace PaymentAndDiscountCardSystemWebAPI.Controllers
@@ -19,8 +18,8 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
         [Route("AddToOrder")]
         public async Task<IActionResult> AddToOrder(Guid orderId, Guid productId)
         {
-            var response = await _orderItemService.AddToOrder(orderId, productId);
-            return Ok(response.Data); 
+            var wasAdded = await _orderItemService.AddToOrder(orderId, productId);
+            return Ok(wasAdded); 
         }
 
         [HttpPut]
@@ -28,7 +27,7 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
         public async Task<IActionResult> UpdateFormOrder(Guid orderItemId, int countOrderItem)
         {
             var response = await _orderItemService.UpdateFromOrder(orderItemId, countOrderItem);
-            return Ok(response.Data);
+            return Ok(response);
         }
 
         [HttpDelete]
@@ -36,7 +35,7 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
         public async Task<IActionResult> Delete(Guid orderItemId)
         {
             var response = await _orderItemService.Delete(orderItemId);
-            return Ok(response.Data);
+            return Ok(response);
         }
     }
 }

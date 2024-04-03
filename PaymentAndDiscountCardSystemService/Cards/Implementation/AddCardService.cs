@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
-using PaymentAndDiscountCardSystem.Domain.Response;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Implementation;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
-using PaymentAndDiscountCardSystemDomain.Enum;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
 
@@ -26,16 +24,11 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
             _logger = logger;
         }
 
-        public async Task<IBaseResponse<Customer>> ToCustomer(Guid customerId, DiscountCardType addedDiscountCardType)
+        public async Task<Customer> ToCustomer(Guid customerId, DiscountCardType addedDiscountCardType)
         {
-            var response = await _customerQueryService.GetById(customerId);
-            if(response.StatusCode == StatusCode.BadRequest)
-            {
-                return response;
-            }
+            var customer = await _customerQueryService.GetById(customerId);
 
-            var customer = response.Data;
-            var log = string.Empty;
+
             
             bool isAddedCard = false;
             foreach(DiscountCardType typeDiscountCard in Enum.GetValues(typeof(DiscountCardType)))
@@ -46,36 +39,30 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
                     {
                         case DiscountCardType.Tube:
                             customer.DiscountCards.Add(new AmountDiscountCard(DiscountCardType.Tube));
-                            log = $"A discount card {addedDiscountCardType} has been added to the customer {customerId}";
-                            _logger.LogInformation(log);
+                            _logger.LogInformation($"A discount card {addedDiscountCardType} has been added to the customer {customerId}");
                             break;
 
                         case DiscountCardType.Transistor:
                             customer.DiscountCards.Add(new AmountDiscountCard(DiscountCardType.Transistor));
-                            log = $"A discount card {addedDiscountCardType} has been added to the customer {customerId}";
-                            _logger.LogInformation(log);
+                            _logger.LogInformation($"A discount card {addedDiscountCardType} has been added to the customer {customerId}");
                             break;
 
                         case DiscountCardType.Integrated:
                             customer.DiscountCards.Add(new AmountDiscountCard(DiscountCardType.Integrated));
-                            log = $"A discount card {addedDiscountCardType} has been added to the customer {customerId}";
-                            _logger.LogInformation(log);
+                            _logger.LogInformation($"A discount card {addedDiscountCardType} has been added to the customer {customerId}");
                             break;
 
                         case DiscountCardType.Quantum:
                             customer.DiscountCards.Add(new QuantumCard());
-                            log = $"A discount card {addedDiscountCardType} has been added to the customer {customerId}";
-                            _logger.LogInformation(log);
+                            _logger.LogInformation($"A discount card {addedDiscountCardType} has been added to the customer {customerId}");
                             break;
 
                         case DiscountCardType.FunnyCard:
                             customer.DiscountCards.Add(new FunnyCard());
-                            log = $"A discount card {addedDiscountCardType} has been added to the customer {customerId}";
-                            _logger.LogInformation(log);
+                            _logger.LogInformation($"A discount card {addedDiscountCardType} has been added to the customer {customerId}");
                             break;
                         default:
-                            log = $"this type of card '{addedDiscountCardType}' does not exist";
-                            _logger.LogError(log);
+                            _logger.LogError($"this type of card '{addedDiscountCardType}' does not exist");
                             break;
                     }
 
@@ -83,14 +70,12 @@ namespace PaymentAndDiscountCardSystemService.Cards.Implementation
                 }
                 else
                 {
-                    log = $"Customer '{customerId}' already has a Discount card '{addedDiscountCardType}'";
-                    _logger.LogError(log);
+                    _logger.LogError($"Customer '{customerId}' already has a Discount card '{addedDiscountCardType}'");
                 }
             }
-            response.Description = log;
             await _customerCreationService.Update(customer);
 
-            return response;
+            return customer;
         }
 
         public bool HasCustomerDuplicateCard(Customer customer, DiscountCardType checkedCardType)

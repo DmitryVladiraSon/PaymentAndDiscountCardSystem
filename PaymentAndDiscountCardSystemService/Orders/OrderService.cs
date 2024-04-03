@@ -1,5 +1,4 @@
-﻿using PaymentAndDiscountCardSystem.Domain.Response;
-using PaymentAndDiscountCardSystemDAL.Repositories.OrderRepository;
+﻿using PaymentAndDiscountCardSystemDAL.Repositories.OrderRepository;
 using PaymentAndDiscountCardSystemDomain.Entity.Orders;
 
 namespace PaymentAndDiscountCardSystemService.Orders
@@ -13,23 +12,26 @@ namespace PaymentAndDiscountCardSystemService.Orders
             _orderRepository = orderRepository;
         }
 
-        public async Task<IBaseResponse<Guid>> Create(Guid customerId)
+        public async Task<Guid> Create(Guid customerId)
         {
-            var response = new BaseResponse<Guid>();
             var order = await _orderRepository.Create(customerId);
-            response.Data = order;
-
-            return response;
+            return order;
         }
-        public async Task<IBaseResponse<Order>> Get(Guid orderId)
+        public async Task<Order> Get(Guid orderId)
         {
-            var response = new BaseResponse<Order>();
             var order = await _orderRepository.Get(orderId);
-            response.Data = order;
-
-            return response;
+            
+            return order;
         }
 
+        public async Task<List<Order>> GetFromCustomer(Guid customerId)
+        {
+            var orders = await _orderRepository.GetAll();
+            var customersOrders = orders
+                .Where(o => o.CustomerId == customerId)
+                .ToList();
+            return customersOrders;
+        }
 
     }
 }

@@ -18,7 +18,7 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
 
         public List<Customer> Entities => throw new NotImplementedException();
 
-        public async Task<Guid> Create(CustomerViewModel customerViewModel)
+        public async Task<Guid> Create(CustomerDTO customerViewModel)
         {
             if (customerViewModel == null)
             {
@@ -45,10 +45,10 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
                     .Include(c => c.DiscountCards)
                     .FirstOrDefaultAsync();
 
-            if (customer == null)
-            {
-                throw new Exception($"Customer with id {customerId} not found.");
-            }
+            //if (customer == null)
+            //{
+            //    throw new Exception($"Customer with id {customerId} not found.");
+            //}
             return customer;
         }
 
@@ -82,7 +82,7 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
                 .ToListAsync();
         }
 
-        public async Task<Customer> Update(Guid customerId, CustomerViewModel customerViewModel)
+        public async Task<Customer> Update(Guid customerId, CustomerDTO customerViewModel)
         {
                await _DbContext.Customers
                     .Where(c => c.Id == customerId)
