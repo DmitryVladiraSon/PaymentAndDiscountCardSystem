@@ -5,6 +5,7 @@ using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemDomain.Entity.Orders;
 using PaymentAndDiscountCardSystemDomain.Entity.OrdersItems;
 using PaymentAndDiscountCardSystemDomain.Entity.Products;
+using PaymentAndDiscountCardSystemDomain.Entity.Users;
 using System.Data.Common;
 
 namespace PaymentAndDiscountCardSystemDAL
@@ -23,6 +24,7 @@ namespace PaymentAndDiscountCardSystemDAL
         
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
           // modelBuilder.Entity<OrderItem>().HasNoKey();

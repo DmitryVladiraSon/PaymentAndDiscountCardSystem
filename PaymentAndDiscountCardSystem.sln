@@ -17,7 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{490269C5-240
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemDAL", "PaymentAndDiscountCardSystemDAL\PaymentAndDiscountCardSystemDAL.csproj", "{4B14D31F-0281-4DE6-9EE9-90BE7A0BD9A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentAndDiscountCardSystemWebAPI", "PaymentAndDiscountCardSystemWebAPI\PaymentAndDiscountCardSystemWebAPI.csproj", "{63D7D9F6-03D2-4983-833D-23B00B4DF7F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemWebAPI", "PaymentAndDiscountCardSystemWebAPI\PaymentAndDiscountCardSystemWebAPI.csproj", "{63D7D9F6-03D2-4983-833D-23B00B4DF7F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentAndDiscountCardSystemInfrastructure", "PaymentAndDiscountCardSystemInfrastructure\PaymentAndDiscountCardSystemInfrastructure.csproj", "{C9A4CAB7-23FB-4D55-B9B6-577974A1870B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{63D7D9F6-03D2-4983-833D-23B00B4DF7F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63D7D9F6-03D2-4983-833D-23B00B4DF7F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63D7D9F6-03D2-4983-833D-23B00B4DF7F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9A4CAB7-23FB-4D55-B9B6-577974A1870B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9A4CAB7-23FB-4D55-B9B6-577974A1870B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9A4CAB7-23FB-4D55-B9B6-577974A1870B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9A4CAB7-23FB-4D55-B9B6-577974A1870B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

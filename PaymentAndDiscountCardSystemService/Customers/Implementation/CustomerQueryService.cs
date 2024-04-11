@@ -2,6 +2,7 @@
 using PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using PaymentAndDiscountCardSystemService.Customers.Interfaces;
+using PaymentAndDiscountCardSystemService.CustomException;
 
 namespace PaymentAndDiscountCardSystemService.Customers.Implementation
 {
@@ -16,7 +17,7 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
             _customerRepository = customerRepository;
         }
 
-        public async Task<Customer?> GetById(Guid customerId)
+        public async Task<Customer>? GetById(Guid customerId)
         {
             var customer = await _customerRepository.Get(customerId);
             if (customer != null)
@@ -25,23 +26,35 @@ namespace PaymentAndDiscountCardSystemService.Customers.Implementation
             }
             else
             {
-                _logger.LogError($"Customer not found with id: {customerId}");
+                _logger.LogError($"Customer don't found with id: {customerId}");
+                throw new UserNotFoundException($"Customer don't found with id: {customerId}");
             }
             return customer;
         }
 
-        public async Task<Customer?> GetByName(string name)
+        public async Task<List<Customer>?> GetByName(string name)
         {
-            var customer = await _customerRepository.GetByName(name);
-            if (customer != null)
+            if (string.IsNullOrEmpty(name))
             {
-                _logger.LogInformation($"Customer found with name: {name}");
+                throw new ArgumentException("Value cannot be null or empty.", nameof(name));
+            }
+
+            var customers = await _customerRepository.GetAll();
+            var customersWithName = customers
+                .Where(c => c.Name == name)
+                .ToList();
+
+            if (customersWithName.Count == 0)
+            {
+                _logger.LogInformation($"Customer(s) found with name: {name}");
             }
             else
             {
-                _logger.LogError($"Customer not found with name: {name}");
+                _logger.LogError($"Customer(s) do not found with name: {name}");
+                //throw new UserNotFoundException($"Customer(s) do not found with name: {name}");
             }
-            return customer;
+
+            return customers;
         }
     }
 }

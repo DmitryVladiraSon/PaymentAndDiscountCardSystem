@@ -1,6 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using PaymentAndDiscountCardSystemDomain.Entity.Customers;
+﻿using Microsoft.EntityFrameworkCore;
 using PaymentAndDiscountCardSystemDomain.Entity.Products;
 
 namespace PaymentAndDiscountCardSystemDAL.Repositories.ProductRepository

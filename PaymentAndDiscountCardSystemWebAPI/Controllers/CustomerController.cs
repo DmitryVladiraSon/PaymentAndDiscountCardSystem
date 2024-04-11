@@ -23,15 +23,16 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
         [Route("Create")]
         public async Task<IActionResult> Create(CustomerDTO customerViewModel)
         {
-            var customerId = await _customerCreationService.Create(customerViewModel);
-            if (customerId != null)
+            if (ModelState.IsValid)
             {
+                var customerId = await _customerCreationService.Create(customerViewModel);
                 return Ok(customerId);
             }
-            
-            else return BadRequest(customerId);
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
-
 
 
         [HttpGet]
@@ -39,13 +40,13 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
         public async Task<IActionResult> Get(Guid customerId)
         {
             var customer = await _customerQueryService.GetById(customerId);
-            
-           if(customer == null)
+
+            if (customer == null)
             {
-                return BadRequest(customer);
+                return BadRequest();
             }
 
-            return Ok(customer);
+            return Ok(customer);    
         }
 
         [HttpPut]

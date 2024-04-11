@@ -59,19 +59,10 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
                 .ToListAsync();
         }
 
-        public async Task<Customer> GetByName(string name)
+        public Task<IQueryable<Customer>> GetAllAsync()
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentException("Value cannot be null or empty.", nameof(name));
-            }
-            else
-            {
-                return await _DbContext.Customers
-                    .Where(c => c.Name == name)
-                    .Include(c => c.DiscountCards)
-                    .SingleOrDefaultAsync();
-            }
+            return Task.FromResult(_DbContext.Customers
+                .AsNoTracking());
         }
 
         public async Task<List<Customer>> GetWithoutCard()

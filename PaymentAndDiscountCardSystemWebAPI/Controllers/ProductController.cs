@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PaymentAndDiscountCardSystemDomain.Entity.Products;
 using PaymentAndDiscountCardSystemService.Products;
 using PaymentAndDiscountCardSystemWebAPI.Data;
@@ -49,7 +50,7 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
         }
         [HttpDelete]
         [Route("Delete")]
-        public async Task<IActionResult> Update(Guid productId)
+        public async Task<IActionResult> Delete(Guid productId)
         {
             var wasDeleted =  await _productService.Delete(productId);
             return Ok(wasDeleted);
@@ -57,6 +58,7 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
         
         [HttpGet]
         [Route("GetAll")]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var products =  await _productService.GetAll();
