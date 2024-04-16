@@ -1,5 +1,5 @@
 ﻿
-namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
+namespace PaymentAndDiscountCardSystemDomain.Entity.Cards
 {
     public enum DiscountCardType
     {

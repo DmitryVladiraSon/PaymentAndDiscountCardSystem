@@ -1,14 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
-using PaymentAndDiscountCardSystem.Service.Customers.Implementation;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards;
+using PaymentAndDiscountCardSystemBLL.Customers.Implementation;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
-using PaymentAndDiscountCardSystemService.Cards.Implementation;
-using PaymentAndDiscountCardSystemService.Cards.Interfaces;
-using PaymentAndDiscountCardSystemService.Customers.Implementation;
-using PaymentAndDiscountCardSystemService.Customers.Interfaces;
-using Serilog;
-using System.Runtime.CompilerServices;
+using PaymentAndDiscountCardSystemBLL.Cards.Implementation;
+using PaymentAndDiscountCardSystemBLL.Cards.Interfaces;
+using PaymentAndDiscountCardSystemBLL.Customers.Implementation;
+using PaymentAndDiscountCardSystemBLL.Customers.Interfaces;
 
 namespace PaymentAndDiscountCardSystem
 {
@@ -32,9 +30,7 @@ namespace PaymentAndDiscountCardSystem
             var addCardService = startup.ServiceProvider.GetService<IAddCardService>();
             var hasCardService = startup.ServiceProvider.GetService<IHasCardService>();
             var deleteCardService = startup.ServiceProvider.GetService<IDeleteCardService>();
-            var dataInitializer = startup.ServiceProvider.GetService<DataInitializer>();
 
-            dataInitializer.Initialize();
 
             //while (true)
             //{

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
-using PaymentAndDiscountCardSystemService.Customers.Interfaces;
+using PaymentAndDiscountCardSystemBLL.Customers.Interfaces;
+using PaymentAndDiscountCardSystemBLL.Customers.Validation;
+using FluentValidation.Results;
 
 namespace PaymentAndDiscountCardSystemWebAPI.Controllers
 {
@@ -21,17 +23,10 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public async Task<IActionResult> Create(CustomerDTO customerViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var customerId = await _customerCreationService.Create(customerViewModel);
-                return Ok(customerId);
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
+        public async Task<IActionResult> Create(CustomerDTO customerDto)
+        { 
+            var customerId = await _customerCreationService.Create(customerDto);
+            return Ok(customerId);
         }
 
 

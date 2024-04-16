@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PaymentAndDiscountCardSystemDomain.Entity.Products;
-using PaymentAndDiscountCardSystemService.Products;
+using PaymentAndDiscountCardSystemBLL.Products;
 using PaymentAndDiscountCardSystemWebAPI.Data;
 
 namespace PaymentAndDiscountCardSystemWebAPI.Controllers

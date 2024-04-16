@@ -13,10 +13,11 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.ProductRepository
         }
         public List<Product> Entities => throw new NotImplementedException();
 
-        public async Task<Guid> Create(ProductDTO entityModelView)
+        public async Task<Guid> Create(Product entityModelView)
         {
-            var product = new Product
+            var product = Product.Create
                 (
+                Guid.NewGuid(),
                 entityModelView.Name,
                 entityModelView.Description,
                 entityModelView.Count,

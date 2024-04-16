@@ -65,7 +65,15 @@ namespace PaymentAndDiscountCardSystemDAL.Migrations
                     b.Property<decimal>("AccumulatedAmount")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -141,29 +149,6 @@ namespace PaymentAndDiscountCardSystemDAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("PaymentAndDiscountCardSystemDomain.Entity.Users.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards.AmountDiscountCard", b =>

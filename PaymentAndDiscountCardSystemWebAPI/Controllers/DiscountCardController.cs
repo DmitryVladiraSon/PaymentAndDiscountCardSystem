@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
-using PaymentAndDiscountCardSystemService.Cards.Interfaces;
+using PaymentAndDiscountCardSystemDomain.Entity.Cards;
+using PaymentAndDiscountCardSystemBLL.Cards.Interfaces;
 
 namespace PaymentAndDiscountCardSystemWebAPI.Controllers
 {

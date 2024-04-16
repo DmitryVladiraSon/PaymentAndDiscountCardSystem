@@ -1,4 +1,4 @@
-﻿using PaymentAndDiscountCardSystemService.Auth;
+﻿using PaymentAndDiscountCardSystemBLL.Auth;
 
 namespace PaymentAndDiscountCardSystemInfrastructure
 {

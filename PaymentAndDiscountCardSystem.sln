@@ -3,23 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystem", "PaymentAndDiscountCardSystemConsoleApp\PaymentAndDiscountCardSystem.csproj", "{09C82F49-E5C7-4D08-92DD-E5502A7DCF38}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{2509E8F9-E45F-48A5-8F11-4C94524138D7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{D8F8A9FD-514A-4A1B-A3B1-0A43E71C0A8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemConsoleApp", "PaymentAndDiscountCardSystemConsoleApp\PaymentAndDiscountCardSystemConsoleApp.csproj", "{09C82F49-E5C7-4D08-92DD-E5502A7DCF38}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemDomain", "PaymentAndDiscountCardSystemDomain\PaymentAndDiscountCardSystemDomain.csproj", "{8136F4D9-8B77-47C7-9393-4AD2E71916C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemService", "PaymentAndDiscountCardSystemService\PaymentAndDiscountCardSystemService.csproj", "{B27E44EB-4288-49E2-A0D0-F8D68FFD95B0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{490269C5-2402-40BB-AC04-7B8A25B5F9BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemBLL", "PaymentAndDiscountCardSystemBLL\PaymentAndDiscountCardSystemBLL.csproj", "{B27E44EB-4288-49E2-A0D0-F8D68FFD95B0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemDAL", "PaymentAndDiscountCardSystemDAL\PaymentAndDiscountCardSystemDAL.csproj", "{4B14D31F-0281-4DE6-9EE9-90BE7A0BD9A6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemWebAPI", "PaymentAndDiscountCardSystemWebAPI\PaymentAndDiscountCardSystemWebAPI.csproj", "{63D7D9F6-03D2-4983-833D-23B00B4DF7F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentAndDiscountCardSystemInfrastructure", "PaymentAndDiscountCardSystemInfrastructure\PaymentAndDiscountCardSystemInfrastructure.csproj", "{C9A4CAB7-23FB-4D55-B9B6-577974A1870B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemInfrastructure", "PaymentAndDiscountCardSystemInfrastructure\PaymentAndDiscountCardSystemInfrastructure.csproj", "{C9A4CAB7-23FB-4D55-B9B6-577974A1870B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentAndDiscountCardSystemTests", "PaymentAndDiscountCardSystemTests\PaymentAndDiscountCardSystemTests.csproj", "{EC0990BE-3CA6-4993-9C4E-68017084383F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,14 +47,13 @@ Global
 		{C9A4CAB7-23FB-4D55-B9B6-577974A1870B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9A4CAB7-23FB-4D55-B9B6-577974A1870B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9A4CAB7-23FB-4D55-B9B6-577974A1870B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC0990BE-3CA6-4993-9C4E-68017084383F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC0990BE-3CA6-4993-9C4E-68017084383F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC0990BE-3CA6-4993-9C4E-68017084383F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC0990BE-3CA6-4993-9C4E-68017084383F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{8136F4D9-8B77-47C7-9393-4AD2E71916C9} = {2509E8F9-E45F-48A5-8F11-4C94524138D7}
-		{B27E44EB-4288-49E2-A0D0-F8D68FFD95B0} = {D8F8A9FD-514A-4A1B-A3B1-0A43E71C0A8B}
-		{4B14D31F-0281-4DE6-9EE9-90BE7A0BD9A6} = {490269C5-2402-40BB-AC04-7B8A25B5F9BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {27F22D51-16E8-445E-A65D-45B5CECF5C2C}

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentAndDiscountCardSystemDomain.Entity.Users;
-using PaymentAndDiscountCardSystemService.Users;
+using PaymentAndDiscountCardSystemDomain.Entity.Customers;
+using PaymentAndDiscountCardSystemBLL.Auth;
 
 namespace PaymentAndDiscountCardSystemWebAPI.Controllers
 {
@@ -8,10 +8,10 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly ILoginService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LoginController(IUserService userService, IHttpContextAccessor httpContextAccessor)
+        public LoginController(ILoginService userService, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
             _httpContextAccessor = httpContextAccessor;
@@ -19,17 +19,15 @@ namespace PaymentAndDiscountCardSystemWebAPI.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register(UserDTO user)
+        public async Task<IActionResult> Register(RegistrationCustomerRequest request)
         {
-            await _userService.Register(user.Name, user.Email, user.Password);
-
-
+            await _userService.Register(request.Name, request.Email, request.Password);
 
             return Ok();
         }
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login(LoginUserRequest request)
+        public async Task<IActionResult> Login(LoginCustomerRequest request)
         {
             var token = await _userService.Login(request.Email, request.Password);
 

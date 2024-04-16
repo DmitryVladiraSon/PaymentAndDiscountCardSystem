@@ -1,7 +1,7 @@
 ﻿
 using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 
-namespace PaymentAndDiscountCardSystem.Domain.Entity.Cards
+namespace PaymentAndDiscountCardSystemDomain.Entity.Cards
 {
     public abstract class DiscountCard
     {

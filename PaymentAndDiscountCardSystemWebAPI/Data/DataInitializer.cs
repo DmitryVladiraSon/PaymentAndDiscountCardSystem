@@ -1,5 +1,6 @@
 ﻿using PaymentAndDiscountCardSystemDAL.Repositories.ProductRepository;
 using PaymentAndDiscountCardSystemDomain.Entity.Products;
+using System.Xml.Linq;
 
 namespace PaymentAndDiscountCardSystemWebAPI.Data
 {
@@ -13,16 +14,24 @@ namespace PaymentAndDiscountCardSystemWebAPI.Data
         }
         public void InitializeProducts(int countProducts)
         {
+            Product product = null;
 
             for (int i = 0; i < countProducts; i++)
             {
-                _productRepository.Create(new ProductDTO
-                {
-                    Name = $"Product {i + 1}",
-                    Description = "Product's description",
-                    Count = 10 + i,
-                    Price = 10000 + i * 1000
-                });
+                var name = $"Product {i + 1}";
+                var Description = "Product's description";
+                var Count = 10 + i;
+                decimal Price = 10000 + i * 1000;
+
+                product = Product.Create(
+                    Guid.NewGuid(),
+                    name,
+                    Description,
+                    Count,
+                    Price
+                    );
+
+                _productRepository.Create(product);
             }
 
             //    _productRepository.Create(new ProductViewModel { Name = "Ноутбук ASUS", Description = "15.6 дюймов, Intel Core i5, 8 ГБ ОЗУ, 512 ГБ SSD", Count = 10, Price = 55000 });

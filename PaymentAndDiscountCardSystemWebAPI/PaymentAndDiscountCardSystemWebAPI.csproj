@@ -19,8 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PaymentAndDiscountCardSystemBLL\PaymentAndDiscountCardSystemBLL.csproj" />
     <ProjectReference Include="..\PaymentAndDiscountCardSystemInfrastructure\PaymentAndDiscountCardSystemInfrastructure.csproj" />
-    <ProjectReference Include="..\PaymentAndDiscountCardSystemService\PaymentAndDiscountCardSystemService.csproj" />
+    <ProjectReference Include="..\PaymentAndDiscountCardSystemService\PaymentAndDiscountCardSystemBLL.csproj" />
   </ItemGroup>
 
 </Project>

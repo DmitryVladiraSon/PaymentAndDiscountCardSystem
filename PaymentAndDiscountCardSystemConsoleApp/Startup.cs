@@ -2,6 +2,7 @@
 using PaymentAndDiscountCardSystem.Service.Customers.Implementation;
 using PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository;
 using PaymentAndDiscountCardSystemDAL.Repositories.DiscountCardRepository;
+using PaymentAndDiscountCardSystemService.Cards;
 using PaymentAndDiscountCardSystemService.Cards.Implementation;
 using PaymentAndDiscountCardSystemService.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Implementation;
@@ -18,13 +19,13 @@ namespace PaymentAndDiscountCardSystem
         {
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddSingleton<ICustomerRepository>(serviceProvider =>
+            serviceCollection.AddSingleton((Func<IServiceProvider, PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository.ICustomerRepository>)(serviceProvider =>
             {
                 return new CustomerRepository();
-            });
+            }));
             serviceCollection.AddSingleton<IDiscountCardRepository, DiscountCardRepository>();
             serviceCollection.AddSingleton<ICustomerCreationService, CustomerCreationService>();
-            serviceCollection.AddSingleton<ICustomerQueryService, CustomerQueryService>();
+            serviceCollection.AddSingleton<PaymentAndDiscountCardSystemService.Customers.Interfaces.ICustomerQueryService, CustomerQueryService>();
             serviceCollection.AddSingleton<IAddCardService, AddCardService>();
             serviceCollection.AddSingleton<IHasCardService, HasCardService>();
             serviceCollection.AddSingleton<IDeleteCardService, DeleteCardService>();

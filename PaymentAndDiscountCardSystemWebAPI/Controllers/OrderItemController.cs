@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PaymentAndDiscountCardSystemService.OrderItems;
+using PaymentAndDiscountCardSystemBLL.OrderItems;
 
 namespace PaymentAndDiscountCardSystemWebAPI.Controllers
 {

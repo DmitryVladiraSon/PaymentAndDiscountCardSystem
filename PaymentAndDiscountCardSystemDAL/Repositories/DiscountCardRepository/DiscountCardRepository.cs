@@ -1,4 +1,4 @@
-﻿using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+﻿using PaymentAndDiscountCardSystemDomain.Entity.Cards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.AmountDiscountCards;
 using PaymentAndDiscountCardSystemDomain.Entity.Cards.DiscountCards.TimeLimitedDiscountCard.Implementation;
 

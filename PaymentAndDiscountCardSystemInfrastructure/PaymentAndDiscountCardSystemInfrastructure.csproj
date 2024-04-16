@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PaymentAndDiscountCardSystemService\PaymentAndDiscountCardSystemService.csproj" />
+    <ProjectReference Include="..\PaymentAndDiscountCardSystemBLL\PaymentAndDiscountCardSystemBLL.csproj" />
   </ItemGroup>
 
 </Project>

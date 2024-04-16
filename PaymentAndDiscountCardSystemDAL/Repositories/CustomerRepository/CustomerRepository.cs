@@ -18,15 +18,16 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
 
         public List<Customer> Entities => throw new NotImplementedException();
 
-        public async Task<Guid> Create(CustomerDTO customerViewModel)
+        public async Task<Guid> Create(Customer customer)
         {
-            if (customerViewModel == null)
+            if (customer == null)
             {
-                throw new ArgumentNullException(nameof(customerViewModel));
+                throw new ArgumentNullException(nameof(customer));
             }
-            await _DbContext.Customers.AddAsync(new Customer(customerViewModel.Name));
+
+            await _DbContext.Customers.AddAsync(customer);
             await _DbContext.SaveChangesAsync();
-            var customer = await _DbContext.Customers.FirstAsync(c=>c.Name == customerViewModel.Name);
+
             return customer.Id;
         }
 
@@ -62,7 +63,13 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
         public Task<IQueryable<Customer>> GetAllAsync()
         {
             return Task.FromResult(_DbContext.Customers
-                .AsNoTracking());
+                .AsNoTracking()
+                .AsQueryable());
+        }
+
+        public Task<Customer> GetByEmailAsync(string email)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<List<Customer>> GetWithoutCard()
@@ -73,12 +80,13 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository
                 .ToListAsync();
         }
 
-        public async Task<Customer> Update(Guid customerId, CustomerDTO customerViewModel)
+        public async Task<Customer> Update(Guid customerId, CustomerDTO customerDto)
         {
                await _DbContext.Customers
                     .Where(c => c.Id == customerId)
                     .ExecuteUpdateAsync(s => s
-                    .SetProperty(c => c.Name, customerViewModel.Name));
+                    .SetProperty(c => c.Name, customerDto.Name)
+                    .SetProperty(c => c.Email, customerDto.Email));
 
                await _DbContext.SaveChangesAsync();
                return await _DbContext.Customers.FindAsync(customerId);

@@ -4,7 +4,7 @@
     {
         List<T> Entities { get; }
 
-        Task<Guid> Create(TModelDTO entityDTO);
+        Task<Guid> Create(T entity);
 
         Task<T> Get(Guid id);
 

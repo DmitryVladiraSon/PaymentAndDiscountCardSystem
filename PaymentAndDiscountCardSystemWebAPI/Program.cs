@@ -1,24 +1,25 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using PaymentAndDiscountCardSystemBLL.Auth;
 using PaymentAndDiscountCardSystemDAL;
 using PaymentAndDiscountCardSystemDAL.Repositories.CustomerRepository;
 using PaymentAndDiscountCardSystemDAL.Repositories.OrderItemRepository;
 using PaymentAndDiscountCardSystemDAL.Repositories.OrderRepository;
 using PaymentAndDiscountCardSystemDAL.Repositories.ProductRepository;
-using PaymentAndDiscountCardSystemDAL.Repositories.UserRepository;
 using PaymentAndDiscountCardSystemInfrastructure;
-using PaymentAndDiscountCardSystemService.Auth;
-using PaymentAndDiscountCardSystemService.Cards.Implementation;
-using PaymentAndDiscountCardSystemService.Cards.Interfaces;
+using PaymentAndDiscountCardSystemBLL.Auth;
+using PaymentAndDiscountCardSystemService.Cards;
+using PaymentAndDiscountCardSystemBLL.Cards.Implementation;
+using PaymentAndDiscountCardSystemBLL.Cards.Interfaces;
 using PaymentAndDiscountCardSystemService.Customers.Implementation;
-using PaymentAndDiscountCardSystemService.Customers.Interfaces;
-using PaymentAndDiscountCardSystemService.OrderItems;
-using PaymentAndDiscountCardSystemService.Orders;
-using PaymentAndDiscountCardSystemService.Products;
-using PaymentAndDiscountCardSystemService.Users;
+using PaymentAndDiscountCardSystemBLL.Customers.Interfaces;
+using PaymentAndDiscountCardSystemBLL.OrderItems;
+using PaymentAndDiscountCardSystemBLL.Orders;
+using PaymentAndDiscountCardSystemBLL.Products;
 using PaymentAndDiscountCardSystemWebAPI.Data;
 using PaymentAndDiscountCardSystemWebAPI.Extensions;
 using System.Text.Json.Serialization;
+using PaymentAndDiscountCardSystemBLL.Customers.Implementation;
 
 namespace PaymentAndDiscountCardSystemWebAPI
 {
@@ -60,8 +61,7 @@ namespace PaymentAndDiscountCardSystemWebAPI
             builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
             builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();

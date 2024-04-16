@@ -1,4 +1,4 @@
-﻿using PaymentAndDiscountCardSystem.Domain.Entity.Cards;
+﻿using PaymentAndDiscountCardSystemDomain.Entity.Cards;
 
 namespace PaymentAndDiscountCardSystemDAL.Repositories.DiscountCardRepository
 {

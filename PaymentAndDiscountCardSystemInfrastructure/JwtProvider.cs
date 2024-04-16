@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using PaymentAndDiscountCardSystemDomain.Entity.Users;
-using PaymentAndDiscountCardSystemService.Auth;
+using PaymentAndDiscountCardSystemBLL.Auth;
+using PaymentAndDiscountCardSystemDomain.Entity.Customers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -16,9 +16,9 @@ namespace PaymentAndDiscountCardSystemInfrastructure
         {
             _options = options.Value;
         }
-        public string GenerateToken(User user)
+        public string GenerateToken(Customer customer)
         {
-            Claim[] claims = [new("userId", user.Id.ToString())];
+            Claim[] claims = [new("customerId", customer.Id.ToString())];
 
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(
