@@ -27,6 +27,9 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.OrderRepository
         {
             var order = await _dbContext.Orders
                 .Where(o => o.OrderId == orderId)
+                .Include(o => o.Customer)
+                .Include(oi => oi.OrderItems)
+                    .ThenInclude(p => p.Product)
                 .FirstOrDefaultAsync();
 
             return order;
@@ -36,7 +39,7 @@ namespace PaymentAndDiscountCardSystemDAL.Repositories.OrderRepository
         {
             return await _dbContext.Orders
                 .Include(o => o.Customer)
-                .Include(oi => oi.orderItems)
+                .Include(oi => oi.OrderItems)
                     .ThenInclude(oi => oi.Product)
                 .ToListAsync();
         }

@@ -13,7 +13,7 @@ namespace PaymentAndDiscountCardSystemDAL.Configuration
 
             builder
         .HasOne(oi => oi.Order) 
-        .WithMany(o => o.orderItems)
+        .WithMany(o => o.OrderItems)
         .HasForeignKey(oi => oi.OrderId);
         }
     }

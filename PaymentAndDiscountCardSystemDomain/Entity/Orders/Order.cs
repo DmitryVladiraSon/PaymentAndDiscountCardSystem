@@ -13,7 +13,7 @@ namespace PaymentAndDiscountCardSystemDomain.Entity.Orders
         public Guid OrderId { get; set; }
         public Guid CustomerId { get; set; }
         public Customer? Customer { get; set; }
-        public List<OrderItem> orderItems { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
 
     }
 }
